@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 from openpyxl import *
 from openpyxl.styles import *
@@ -7,17 +8,36 @@ from time import sleep
 import string
 from alive_progress import alive_bar
 
-with alive_bar(5, manual=True,title='Title here',theme='smooth',bar='blocks') as bar:   # default setting
+print('Processing Report 1')
+## DECLARE VARIABLES
+#Source vars
+fs_path = os.getcwd()
+fs_name = "test"
+fs_ext = ".csv"
+
+##Create working directory
+wd_name = "Export"
+wd = os.getcwd()
+#exp_dir=os.mkdir(wd_name)
+if not os.path.exists(wd_name):
+    os.makedirs(wd_name)
+
+
+#Dest vars
+fd_path = fs_path
+fd_name = wd_name
+fd_ext = ".xlsx"
+with alive_bar(5, manual=True,title='Report 1',theme='smooth',bar='blocks') as bar:   # default setting
 
 	## Report 1 - 
 	#convert csv to xlsx using pandas lib
-	read_file = pd.read_csv (r'/Users/ishan/Documents/test.csv')
+	read_file = pd.read_csv (''r''+fs_path+'/'+fs_name+fs_ext)
 	bar (.10)
-	read_file.to_excel (r'/Users/ishan/Documents/test.xlsx', index = None, header=True)
+	read_file.to_excel (''r''+fd_path+'/'+fd_name+'/'+fs_name+fd_ext, index = None, header=True)
 	bar(.20)
 	#read xlsx
 	#assign the excel file to wb() variable
-	wb=load_workbook("/Users/ishan/Documents/test.xlsx")
+	wb=load_workbook(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
 	bar(.30)
 
 	#assign the worksheet of the workbook to a ws() variable
@@ -32,7 +52,6 @@ with alive_bar(5, manual=True,title='Title here',theme='smooth',bar='blocks') as
 	for cell in ws["1:1"]:
 		cell.font = Font(size=12)
 		cell.style = 'Accent1'
-
 	bar(.80)
 	#set column width to 15 with loop
 	for col in range(1, 54):
@@ -41,11 +60,6 @@ with alive_bar(5, manual=True,title='Title here',theme='smooth',bar='blocks') as
 
 	#Save the excel file
 	bar(1)
-	wb.save("/Users/ishan/Documents/test.xlsx")
-
+	wb.save(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
 	bar()
-	#print ('Report Completed')
-
-
-
-
+print('Export Completed')
