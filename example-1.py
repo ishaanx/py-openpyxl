@@ -1,3 +1,16 @@
+## Script for excel manipulation. 
+## First convert the input csv to excel
+## Open the xlsx file
+## Set Fonts, Styles, etc.
+## Correct the headers
+## Save the report
+
+## Libraries used:
+## < alive-progress > To show progress bar
+## < Pandas > TO convert csv/tsv to xlsx
+## < Openpyxl > For xlsx manipulation
+## < os > Provides basic functions
+
 import os
 import pandas as pd
 from openpyxl import *
@@ -27,12 +40,14 @@ if not os.path.exists(wd_name):
 fd_path = fs_path
 fd_name = wd_name
 fd_ext = ".xlsx"
+
+#main prog
 with alive_bar(5, manual=True,title='Report 1',theme='smooth',bar='blocks') as bar:   # default setting
 
 	## Report 1 - 
 	#convert csv to xlsx using pandas lib
 	read_file = pd.read_csv (''r''+fs_path+'/'+fs_name+fs_ext)
-	bar (.10)
+	bar(.10)
 	read_file.to_excel (''r''+fd_path+'/'+fd_name+'/'+fs_name+fd_ext, index = None, header=True)
 	bar(.20)
 	#read xlsx
