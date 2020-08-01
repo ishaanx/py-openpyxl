@@ -20,12 +20,12 @@ from openpyxl.workbook import Workbook
 from time import sleep
 import string
 from alive_progress import alive_bar
+import sys
 
-print('Processing Report 1')
 ## DECLARE VARIABLES
 #Source vars
 fs_path = os.getcwd()
-fs_name = "test"
+fs_name = sys.argv[1]
 fs_ext = ".csv"
 
 ##Create working directory
@@ -41,12 +41,14 @@ fd_path = fs_path
 fd_name = wd_name
 fd_ext = ".xlsx"
 
+print('Processing')
 #main prog
-with alive_bar(5, manual=True,title='Report 1',theme='smooth',bar='blocks') as bar:   # default setting
+with alive_bar(total=100, manual='True',title=fs_name,theme='smooth',bar='blocks',spinner='classic') as bar:   # default setting
 
 	## Report 1 - 
 	#convert csv to xlsx using pandas lib
 	read_file = pd.read_csv (''r''+fs_path+'/'+fs_name+fs_ext)
+	bar.text('Converting csv to xlsx. This might take a while...')
 	bar(.10)
 	read_file.to_excel (''r''+fd_path+'/'+fd_name+'/'+fs_name+fd_ext, index = None, header=True)
 	bar(.20)
@@ -60,21 +62,26 @@ with alive_bar(5, manual=True,title='Report 1',theme='smooth',bar='blocks') as b
 	bar(.40)
 	mr = ws.max_row
 	mc = ws.max_column
+	bar.text('Applying Font Sizes')
 	for cell in ws[mr:mc]:
 		cell.font = Font(size=11)
-	bar(.60)
+	bar(.50)
 	# Set header row style
+	bar.text('Applying Header Styles')
 	for cell in ws["1:1"]:
 		cell.font = Font(size=12)
 		cell.style = 'Accent1'
-	bar(.80)
+		cell.alignment = Alignment(wrapText='True',horizontal='center')
+	bar(.60)
 	#set column width to 15 with loop
 	for col in range(1, 54):
 		ws.column_dimensions[(get_column_letter(col))].width = 15
-
-
+	ws.freeze_panes = "A2"
+	bar(.70)
 	#Save the excel file
-	bar(1)
+	bar.text('Saving file')
+	bar(.80)
+	bar(.90)
 	wb.save(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
-	bar()
+	bar(1)
 print('Export Completed')
