@@ -5,11 +5,20 @@ import csv
 import shutil
 import pandas as pd
 import xlsxwriter
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+
+
+
 
 output_path='./temp'
 
+def cleanup():
+    if os.path.exists(output_path):
+        shutil.rmtree(output_path)
+
 def split(filehandler, delimiter=',', row_limit=300000, 
-    output_name_template='pm_output_%s.csv',  keep_headers=True):
+    output_name_template='Payments_%s.csv',  keep_headers=True):
     """
     Splits a CSV file into multiple pieces.
     
@@ -25,7 +34,6 @@ def split(filehandler, delimiter=',', row_limit=300000,
         >> csv_splitter.split(open('/home/ben/input.csv', 'r'));
     
     """
-    #shutil.rmtree(output_path)
     if not os.path.exists(output_path):
         os.makedirs(output_path)
 
@@ -35,6 +43,7 @@ def split(filehandler, delimiter=',', row_limit=300000,
          output_path,
          output_name_template  % current_piece
     )
+
     current_out_writer = csv.writer(open(current_out_path, 'w'), delimiter=delimiter)
     current_limit = row_limit
     if keep_headers:
@@ -55,24 +64,33 @@ def split(filehandler, delimiter=',', row_limit=300000,
 
 
 
-# join multiple csv to a sinfle workbook with diff worksheets
+# join multiple csv to a single workbook with diff worksheets
 def split_join():
-    writer = pd.ExcelWriter('multi_sheet.xlsx', engine='xlsxwriter')
+        # Returns the same day of last month if possible otherwise end of month
+    # (eg: March 31st->29th Feb an July 31st->June 30th)
+    last_month = datetime.now() - relativedelta(months=1)
+
+    # Create string of month name and year...
+    text = format(last_month, '%B %Y')
+    prev_mon = '['+text+']'
+    print(prev_mon)
+    fname = 'Payments'+prev_mon+'.xlsx'
+    writer = pd.ExcelWriter(fname, engine='xlsxwriter')
     folders = next(os.walk('.'))[1]
     for host in folders:
         Path = os.path.join(os.getcwd(), host)
-        for f in glob.glob(os.path.join(Path, "pm_output*.csv")):
+        for f in glob.glob(os.path.join(Path, "Payments_*.csv")):
             print(f)
             df = pd.read_csv(f,sep="\t",low_memory=False)
             df.to_excel(writer, index=False,sheet_name=os.path.basename(f)[:31])
 
     writer.save()
-    shutil.rmtree(output_path)
+    
 
-
+cleanup()
 split(open('Payments-Jun.csv', 'r'))
 split_join()
-
+cleanup()
 
 
 
