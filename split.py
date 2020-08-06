@@ -11,10 +11,9 @@ import string
 from alive_progress import alive_bar
 import sys
 import subprocess
-import openpyxl 
-import openpyxl.styles
-import openpyxl.utils
-import openpyxl.workbook
+import time
+
+
 
 def wrapper():
     output_path='./temp'
@@ -23,6 +22,7 @@ def wrapper():
         print('Cleaning Up temp files')
         if os.path.exists(output_path):
             shutil.rmtree(output_path)
+
 
     def split(filehandler, delimiter=',', row_limit=300000, 
         output_name_template='Payments_%s.csv',  keep_headers=True):
@@ -87,18 +87,20 @@ def wrapper():
                 #print(f)
                 df = pd.read_csv(f,sep="\t",low_memory=False)
                 df.to_excel(writer, index=False,sheet_name=os.path.basename(f)[:31])
-
-        writer.save()
+            writer.save()
         return fname
 
 
 
     def styl():
+        import openpyxl
+        from openpyxl.reader.excel import load_workbook
+        from openpyxl.styles import Font, Alignment 
+        from openpyxl.utils import get_column_letter
         print('Applying')
         fname = split_join()
         print(fname)
         wb = load_workbook(fname)
-
         for ws in wb.worksheets:
             mr = ws.max_row
             mc = ws.max_column
@@ -119,5 +121,6 @@ def wrapper():
     split_join()
     styl()
     cleanup()
+
 
 wrapper()
