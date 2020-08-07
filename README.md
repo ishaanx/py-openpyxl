@@ -1,2 +1,2 @@
 # py-openpyxl
-Easy implementation of Openpyxl library to automate Excel reports
+Implementation of various libraries to automate Excel reports
