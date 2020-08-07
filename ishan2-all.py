@@ -17,9 +17,21 @@ from openpyxl.styles import *
 from openpyxl.utils import get_column_letter
 from openpyxl.workbook import Workbook
 
-
-v_chg_and_adj = input('Enter the file name for Charges and adjustments: ')
-print(v_chg_and_adj)
+#Input file names without extension
+#Example: 'Payments-Jun'
+v_chg_and_adj = 'Charges_And_Adjustment_Jun'
+v_payments = 'Payments-Jun'
+v_cct = 'CCT-Information-Jun'
+v_discp_rates = 'Discrepant_Rates_Jun'
+v_dnr1 = 'DNR-1-Jun'
+v_dnr2 = 'DNR-2-Jun'
+v_dnr3 = 'DNR-3-Jun'
+v_grts_and_gst = 'Gratis_And_GstCert_Report_Jun'
+v_gst_email = 'Guest_Email_Jun'
+v_lldb = 'LLDB_Jun'
+v_pay_and_ref = 'Payments_And_Refunds_Jun'
+v_prop_over = 'Property_Overview_Jun'
+v_room_moves = 'Room_Moves_Jun'
 
 def payments():
 
@@ -120,7 +132,7 @@ def payments():
                 cell.font = Font(size=12)
                 cell.style = 'Accent1'
                 cell.alignment = Alignment(wrapText='True',horizontal='center')
-            for col in range(1, 54):
+            for col in range(1, 30):
                 ws.column_dimensions[(get_column_letter(col))].width = 15
                 ws.freeze_panes = "A2"
         wb.save(fname)
@@ -192,7 +204,7 @@ def chg_and_adj():
             cell.alignment = Alignment(wrapText='True',horizontal='center')
         bar(.80)
         #set column width to 15 with loop
-        for col in range(1, 54):
+        for col in range(1, 30):
             ws.column_dimensions[(get_column_letter(col))].width = 15
             ws.freeze_panes = "A2"
 
@@ -204,27 +216,672 @@ def chg_and_adj():
 
 
 def cct():
-    print('This is the 3 func')
+    print('Processing CCT Info Report')
+    ## DECLARE VARIABLES
+    #Source vars
+    fs_path = os.getcwd()
+    fs_name = v_cct
+    fs_ext = ".csv"
+
+    ##Create working directory
+    wd_name = "Export"
+    wd = os.getcwd()
+    #exp_dir=os.mkdir(wd_name)
+    if not os.path.exists(wd_name):
+        os.makedirs(wd_name)
+
+
+    #Dest vars
+    fd_path = fs_path
+    fd_name = wd_name
+    fd_ext = ".xlsx"
+
+    #main prog
+    with alive_bar(5, manual=True,title='Report 1',theme='smooth',bar='blocks') as bar:   # default setting
+
+        ## Report 1 - 
+        #convert csv to xlsx using pandas lib
+        read_file = pd.read_csv (''r''+fs_path+'/'+fs_name+fs_ext,sep="\t")
+        bar(.10)
+        read_file.to_excel (''r''+fd_path+'/'+fd_name+'/'+fs_name+fd_ext, index = None, header=True)
+        bar(.20)
+        #read xlsx
+        #assign the excel file to wb() variable
+        wb=load_workbook(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
+        bar(.30)
+
+        #assign the worksheet of the workbook to a ws() variable
+        ws=wb.active
+        # Columns: property_code date  serial_no   product applicationVersion  manufacturer    mfg_serial_no
+        ws['A1'] = 'Property Code'
+        ws['B1'] = 'Date'
+        ws['C1'] = 'Serial No'
+        ws['D1'] = 'Product'
+        ws['E1'] = 'Application Version'
+        ws['F1'] = 'Manufacturer'
+        ws['G1'] = 'MFG Serial No'
+
+        bar(.40)
+        mr = ws.max_row
+        mc = ws.max_column
+        for cell in ws[mr:mc]:
+            cell.font = Font(size=11)
+        bar(.60)
+        # Set header row style
+        for cell in ws["1:1"]:
+            cell.font = Font(size=12)
+            cell.style = 'Accent1'
+            cell.alignment = Alignment(wrapText='True',horizontal='center')
+        bar(.80)
+        #set column width to 15 with loop
+        for col in range(1, 30):
+            ws.column_dimensions[(get_column_letter(col))].width = 15
+            ws.freeze_panes = "A2"
+        #Save the excel file
+        bar(1)
+        wb.save(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
+        bar()
+    print('Export Completed')
+
+
 def discp_rates():
-    print('This is the 3 func')
+    print('Processing Report 1')
+    ## DECLARE VARIABLES
+    #Source vars
+    fs_path = os.getcwd()
+    fs_name = v_discp_rates
+    fs_ext = ".csv"
+
+    ##Create working directory
+    wd_name = "Export"
+    wd = os.getcwd()
+    #exp_dir=os.mkdir(wd_name)
+    if not os.path.exists(wd_name):
+        os.makedirs(wd_name)
+
+
+    #Dest vars
+    fd_path = fs_path
+    fd_name = wd_name
+    fd_ext = ".xlsx"
+
+    #main prog
+    with alive_bar(5, manual=True,title='Report 1',theme='smooth',bar='blocks') as bar:   # default setting
+
+        ## Report 1 - 
+        #convert csv to xlsx using pandas lib
+        read_file = pd.read_csv (''r''+fs_path+'/'+fs_name+fs_ext,sep="\t")
+        bar(.10)
+        read_file.to_excel (''r''+fd_path+'/'+fd_name+'/'+fs_name+fd_ext, index = None, header=True)
+        bar(.20)
+        #read xlsx
+        #assign the excel file to wb() variable
+        wb=load_workbook(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
+        bar(.30)
+
+        #assign the worksheet of the workbook to a ws() variable
+        ws=wb.active
+        bar(.40)
+        mr = ws.max_row
+        mc = ws.max_column
+        for cell in ws[mr:mc]:
+            cell.font = Font(size=11)
+        bar(.60)
+        # Set header row style
+        for cell in ws["1:1"]:
+            cell.font = Font(size=12)
+            cell.style = 'Accent1'
+            cell.alignment = Alignment(wrapText='True',horizontal='center')
+        bar(.80)
+        #set column width to 15 with loop
+        for col in range(1, 30):
+            ws.column_dimensions[(get_column_letter(col))].width = 15
+            ws.freeze_panes = "A2"
+        #Save the excel file
+        bar(1)
+        wb.save(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
+        bar()
+    print('Export Completed')
+
 def dnr1():
-    print('This is the 3 func')
+    print('Processing Report 1')
+    ## DECLARE VARIABLES
+    #Source vars
+    fs_path = os.getcwd()
+    fs_name = v_dnr1
+    fs_ext = ".csv"
+
+    ##Create working directory
+    wd_name = "Export"
+    wd = os.getcwd()
+    #exp_dir=os.mkdir(wd_name)
+    if not os.path.exists(wd_name):
+        os.makedirs(wd_name)
+
+
+    #Dest vars
+    fd_path = fs_path
+    fd_name = wd_name
+    fd_ext = ".xlsx"
+
+    #main prog
+    with alive_bar(5, manual=True,title='Report 1',theme='smooth',bar='blocks') as bar:   # default setting
+
+        ## Report 1 - 
+        #convert csv to xlsx using pandas lib
+        read_file = pd.read_csv (''r''+fs_path+'/'+fs_name+fs_ext,sep="\t")
+        bar(.10)
+        read_file.to_excel (''r''+fd_path+'/'+fd_name+'/'+fs_name+fd_ext, index = None, header=True)
+        bar(.20)
+        #read xlsx
+        #assign the excel file to wb() variable
+        wb=load_workbook(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
+        bar(.30)
+
+        #assign the worksheet of the workbook to a ws() variable
+        ws=wb.active
+        bar(.40)
+        mr = ws.max_row
+        mc = ws.max_column
+        for cell in ws[mr:mc]:
+            cell.font = Font(size=11)
+        bar(.60)
+        # Set header row style
+        for cell in ws["1:1"]:
+            cell.font = Font(size=12)
+            cell.style = 'Accent1'
+            cell.alignment = Alignment(wrapText='True',horizontal='center')
+        bar(.80)
+        #set column width to 15 with loop
+        for col in range(1, 30):
+            ws.column_dimensions[(get_column_letter(col))].width = 15
+            ws.freeze_panes = "A2"
+        #Save the excel file
+        bar(1)
+        wb.save(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
+        bar()
+    print('Export Completed')
+
 def dnr2():
-    print('This is the 3 func')
+    print('Processing Report 1')
+    ## DECLARE VARIABLES
+    #Source vars
+    fs_path = os.getcwd()
+    fs_name = v_dnr2
+    fs_ext = ".csv"
+
+    ##Create working directory
+    wd_name = "Export"
+    wd = os.getcwd()
+    #exp_dir=os.mkdir(wd_name)
+    if not os.path.exists(wd_name):
+        os.makedirs(wd_name)
+
+
+    #Dest vars
+    fd_path = fs_path
+    fd_name = wd_name
+    fd_ext = ".xlsx"
+
+    #main prog
+    with alive_bar(5, manual=True,title='Report 1',theme='smooth',bar='blocks') as bar:   # default setting
+
+        ## Report 1 - 
+        #convert csv to xlsx using pandas lib
+        read_file = pd.read_csv (''r''+fs_path+'/'+fs_name+fs_ext,sep="\t")
+        bar(.10)
+        read_file.to_excel (''r''+fd_path+'/'+fd_name+'/'+fs_name+fd_ext, index = None, header=True)
+        bar(.20)
+        #read xlsx
+        #assign the excel file to wb() variable
+        wb=load_workbook(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
+        bar(.30)
+
+        #assign the worksheet of the workbook to a ws() variable
+        ws=wb.active
+        bar(.40)
+        mr = ws.max_row
+        mc = ws.max_column
+        for cell in ws[mr:mc]:
+            cell.font = Font(size=11)
+        bar(.60)
+        # Set header row style
+        for cell in ws["1:1"]:
+            cell.font = Font(size=12)
+            cell.style = 'Accent1'
+            cell.alignment = Alignment(wrapText='True',horizontal='center')
+        bar(.80)
+        #set column width to 15 with loop
+        for col in range(1, 30):
+            ws.column_dimensions[(get_column_letter(col))].width = 15
+            ws.freeze_panes = "A2"
+
+
+        #Save the excel file
+        bar(1)
+        wb.save(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
+        bar()
+    print('Export Completed')
+
 def dnr3():
-    print('This is the 3 func')
+    print('Processing Report 1')
+    ## DECLARE VARIABLES
+    #Source vars
+    fs_path = os.getcwd()
+    fs_name = v_dnr3
+    fs_ext = ".csv"
+
+    ##Create working directory
+    wd_name = "Export"
+    wd = os.getcwd()
+    #exp_dir=os.mkdir(wd_name)
+    if not os.path.exists(wd_name):
+        os.makedirs(wd_name)
+
+
+    #Dest vars
+    fd_path = fs_path
+    fd_name = wd_name
+    fd_ext = ".xlsx"
+
+    #main prog
+    with alive_bar(5, manual=True,title='Report 1',theme='smooth',bar='blocks') as bar:   # default setting
+
+        ## Report 1 - 
+        #convert csv to xlsx using pandas lib
+        read_file = pd.read_csv (''r''+fs_path+'/'+fs_name+fs_ext,sep="\t")
+        bar(.10)
+        read_file.to_excel (''r''+fd_path+'/'+fd_name+'/'+fs_name+fd_ext, index = None, header=True)
+        bar(.20)
+        #read xlsx
+        #assign the excel file to wb() variable
+        wb=load_workbook(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
+        bar(.30)
+
+        #assign the worksheet of the workbook to a ws() variable
+        ws=wb.active
+        bar(.40)
+        mr = ws.max_row
+        mc = ws.max_column
+        for cell in ws[mr:mc]:
+            cell.font = Font(size=11)
+        bar(.60)
+        # Set header row style
+        for cell in ws["1:1"]:
+            cell.font = Font(size=12)
+            cell.style = 'Accent1'
+            cell.alignment = Alignment(wrapText='True',horizontal='center')
+        bar(.80)
+        #set column width to 15 with loop
+        for col in range(1, 30):
+            ws.column_dimensions[(get_column_letter(col))].width = 15
+            ws.freeze_panes = "A2"
+        #Save the excel file
+        bar(1)
+        wb.save(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
+        bar()
+    print('Export Completed')
+
 def grts_and_gst():
-    print('This is the 3 func')
+    print('Processing Gratis & GSTCERT Report')
+    ## DECLARE VARIABLES
+    #Source vars
+    fs_path = os.getcwd()
+    fs_name = v_grts_and_gst
+    fs_ext = ".csv"
+
+    ##Create working directory
+    wd_name = "Export"
+    wd = os.getcwd()
+    #exp_dir=os.mkdir(wd_name)
+    if not os.path.exists(wd_name):
+        os.makedirs(wd_name)
+
+
+    #Dest vars
+    fd_path = fs_path
+    fd_name = wd_name
+    fd_ext = ".xlsx"
+
+    #main prog
+    with alive_bar(5, manual=True,title='Report 1',theme='smooth',bar='blocks') as bar:   # default setting
+
+        ## Report 1 - 
+        #convert csv to xlsx using pandas lib
+        read_file = pd.read_csv (''r''+fs_path+'/'+fs_name+fs_ext,sep="\t")
+        bar(.10)
+        read_file.to_excel (''r''+fd_path+'/'+fd_name+'/'+fs_name+fd_ext, index = None, header=True)
+        bar(.20)
+        #read xlsx
+        #assign the excel file to wb() variable
+        wb=load_workbook(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
+        bar(.30)
+
+        #assign the worksheet of the workbook to a ws() variable
+        ws=wb.active
+        bar(.40)
+        mr = ws.max_row
+        mc = ws.max_column
+        for cell in ws[mr:mc]:
+            cell.font = Font(size=11)
+        bar(.60)
+        # Set header row style
+        for cell in ws["1:1"]:
+            cell.font = Font(size=12)
+            cell.style = 'Accent1'
+            cell.alignment = Alignment(wrapText='True',horizontal='center')
+        bar(.80)
+        #set column width to 15 with loop
+        for col in range(1, 30):
+            ws.column_dimensions[(get_column_letter(col))].width = 15
+            ws.freeze_panes = "A2"
+
+        #Save the excel file
+        bar(1)
+        wb.save(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
+        bar()
+    print('Export Completed')
+
 def gst_email():
-    print('This is the 3 func')
+    print('Processing Report 1')
+    ## DECLARE VARIABLES
+    #Source vars
+    fs_path = os.getcwd()
+    fs_name = v_gst_email
+    fs_ext = ".csv"
+
+    ##Create working directory
+    wd_name = "Export"
+    wd = os.getcwd()
+    #exp_dir=os.mkdir(wd_name)
+    if not os.path.exists(wd_name):
+        os.makedirs(wd_name)
+
+
+    #Dest vars
+    fd_path = fs_path
+    fd_name = wd_name
+    fd_ext = ".xlsx"
+
+    #main prog
+    with alive_bar(5, manual=True,title='Report 1',theme='smooth',bar='blocks') as bar:   # default setting
+
+        ## Report 1 - 
+        #convert csv to xlsx using pandas lib
+        read_file = pd.read_csv (''r''+fs_path+'/'+fs_name+fs_ext,sep="\t")
+        bar(.10)
+        read_file.to_excel (''r''+fd_path+'/'+fd_name+'/'+fs_name+fd_ext, index = None, header=True)
+        bar(.20)
+        #read xlsx
+        #assign the excel file to wb() variable
+        wb=load_workbook(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
+        bar(.30)
+
+        #assign the worksheet of the workbook to a ws() variable
+        ws=wb.active
+        bar(.40)
+        mr = ws.max_row
+        mc = ws.max_column
+        for cell in ws[mr:mc]:
+            cell.font = Font(size=11)
+        bar(.60)
+        # Set header row style
+        for cell in ws["1:1"]:
+            cell.font = Font(size=12)
+            cell.style = 'Accent1'
+            cell.alignment = Alignment(wrapText='True',horizontal='center')
+        bar(.80)
+        #set column width to 15 with loop
+        for col in range(1, 30):
+            ws.column_dimensions[(get_column_letter(col))].width = 15
+            ws.freeze_panes = "A2"
+
+        #Save the excel file
+        bar(1)
+        wb.save(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
+        bar()
+    print('Export Completed')
+
 def lldb():
-    print('This is the 3 func')
+    print('Processing Report 1')
+    ## DECLARE VARIABLES
+    #Source vars
+    fs_path = os.getcwd()
+    fs_name = v_lldb
+    fs_ext = ".csv"
+
+    ##Create working directory
+    wd_name = "Export"
+    wd = os.getcwd()
+    #exp_dir=os.mkdir(wd_name)
+    if not os.path.exists(wd_name):
+        os.makedirs(wd_name)
+
+
+    #Dest vars
+    fd_path = fs_path
+    fd_name = wd_name
+    fd_ext = ".xlsx"
+
+    #main prog
+    with alive_bar(5, manual=True,title='Report 1',theme='smooth',bar='blocks') as bar:   # default setting
+
+        ## Report 1 - 
+        #convert csv to xlsx using pandas lib
+        read_file = pd.read_csv (''r''+fs_path+'/'+fs_name+fs_ext,sep='\t',header=0,names=['Property Code','Confirmation Number', 'Checkin Date','Checkout Date','Company Name','Total Charges','External Confirmation No'])
+        bar(.10)
+        read_file.to_excel (''r''+fd_path+'/'+fd_name+'/'+fs_name+fd_ext, index = None, header=True)
+        bar(.20)
+        #read xlsx
+        #assign the excel file to wb() variable
+        wb=load_workbook(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
+        bar(.30)
+
+        #assign the worksheet of the workbook to a ws() variable
+        ws=wb.active
+        bar(.40)
+        mr = ws.max_row
+        mc = ws.max_column
+        for cell in ws[mr:mc]:
+            cell.font = Font(size=11)
+        bar(.60)
+        # Set header row style
+        for cell in ws["1:1"]:
+            cell.font = Font(size=12)
+            cell.style = 'Accent1'
+            cell.alignment = Alignment(wrapText='True',horizontal='center')
+        bar(.80)
+        #set column width to 15 with loop
+        for col in range(1, 30):
+            ws.column_dimensions[(get_column_letter(col))].width = 15
+            ws.freeze_panes = "A2"
+
+        #Save the excel file
+        bar(1)
+        wb.save(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
+        bar()
+    print('Export Completed')
+
 def pay_and_ref():
-    print('This is the 3 func')
+    print('Processing Report 1')
+    ## DECLARE VARIABLES
+    #Source vars
+    fs_path = os.getcwd()
+    fs_name = v_pay_and_ref
+    fs_ext = ".csv"
+
+    ##Create working directory
+    wd_name = "Export"
+    wd = os.getcwd()
+    #exp_dir=os.mkdir(wd_name)
+    if not os.path.exists(wd_name):
+        os.makedirs(wd_name)
+
+
+    #Dest vars
+    fd_path = fs_path
+    fd_name = wd_name
+    fd_ext = ".xlsx"
+
+    #main prog
+    with alive_bar(5, manual=True,title='Report 1',theme='smooth',bar='blocks') as bar:   # default setting
+
+        ## Report 1 - 
+        #convert csv to xlsx using pandas lib
+        read_file = pd.read_csv (''r''+fs_path+'/'+fs_name+fs_ext,sep="\t")
+        bar(.10)
+        read_file.to_excel (''r''+fd_path+'/'+fd_name+'/'+fs_name+fd_ext, index = None, header=True)
+        bar(.20)
+        #read xlsx
+        #assign the excel file to wb() variable
+        wb=load_workbook(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
+        bar(.30)
+
+        #assign the worksheet of the workbook to a ws() variable
+        ws=wb.active
+        bar(.40)
+        mr = ws.max_row
+        mc = ws.max_column
+        for cell in ws[mr:mc]:
+            cell.font = Font(size=11)
+        bar(.60)
+        # Set header row style
+        for cell in ws["1:1"]:
+            cell.font = Font(size=12)
+            cell.style = 'Accent1'
+            cell.alignment = Alignment(wrapText='True',horizontal='center')
+        bar(.80)
+        #set column width to 15 with loop
+        for col in range(1, 30):
+            ws.column_dimensions[(get_column_letter(col))].width = 15
+            ws.freeze_panes = "A2"
+
+        #Save the excel file
+        bar(1)
+        wb.save(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
+        bar()
+    print('Export Completed')
+
 def prop_over():
-    print('This is the 3 func')
+    print('Processing Report 1')
+    ## DECLARE VARIABLES
+    #Source vars
+    fs_path = os.getcwd()
+    fs_name = v_prop_over
+    fs_ext = ".csv"
+
+    ##Create working directory
+    wd_name = "Export"
+    wd = os.getcwd()
+    #exp_dir=os.mkdir(wd_name)
+    if not os.path.exists(wd_name):
+        os.makedirs(wd_name)
+
+
+    #Dest vars
+    fd_path = fs_path
+    fd_name = wd_name
+    fd_ext = ".xlsx"
+
+    #main prog
+    with alive_bar(5, manual=True,title='Report 1',theme='smooth',bar='blocks') as bar:   # default setting
+
+        ## Report 1 - 
+        #convert csv to xlsx using pandas lib
+        read_file = pd.read_csv (''r''+fs_path+'/'+fs_name+fs_ext,sep="\t")
+        bar(.10)
+        read_file.to_excel (''r''+fd_path+'/'+fd_name+'/'+fs_name+fd_ext, index = None, header=True)
+        bar(.20)
+        #read xlsx
+        #assign the excel file to wb() variable
+        wb=load_workbook(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
+        bar(.30)
+
+        #assign the worksheet of the workbook to a ws() variable
+        ws=wb.active
+        bar(.40)
+        mr = ws.max_row
+        mc = ws.max_column
+        for cell in ws[mr:mc]:
+            cell.font = Font(size=11)
+        bar(.60)
+        # Set header row style
+        for cell in ws["1:1"]:
+            cell.font = Font(size=12)
+            cell.style = 'Accent1'
+            cell.alignment = Alignment(wrapText='True',horizontal='center')
+        bar(.80)
+        #set column width to 15 with loop
+        for col in range(1, 30):
+            ws.column_dimensions[(get_column_letter(col))].width = 15
+            ws.freeze_panes = "A2"
+
+        #Save the excel file
+        bar(1)
+        wb.save(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
+        bar()
+    print('Export Completed')
+
 def room_moves():
-    print('This is the 3 func')
+    print('Processing Report 1')
+    ## DECLARE VARIABLES
+    #Source vars
+    fs_path = os.getcwd()
+    fs_name = v_room_moves
+    fs_ext = ".csv"
+
+    ##Create working directory
+    wd_name = "Export"
+    wd = os.getcwd()
+    #exp_dir=os.mkdir(wd_name)
+    if not os.path.exists(wd_name):
+        os.makedirs(wd_name)
+
+
+    #Dest vars
+    fd_path = fs_path
+    fd_name = wd_name
+    fd_ext = ".xlsx"
+
+    #main prog
+    with alive_bar(5, manual=True,title='Report 1',theme='smooth',bar='blocks') as bar:   # default setting
+
+        ## Report 1 - 
+        #convert csv to xlsx using pandas lib
+        read_file = pd.read_csv (''r''+fs_path+'/'+fs_name+fs_ext,sep="\t")
+        bar(.10)
+        read_file.to_excel (''r''+fd_path+'/'+fd_name+'/'+fs_name+fd_ext, index = None, header=True)
+        bar(.20)
+        #read xlsx
+        #assign the excel file to wb() variable
+        wb=load_workbook(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
+        bar(.30)
+
+        #assign the worksheet of the workbook to a ws() variable
+        ws=wb.active
+        bar(.40)
+        mr = ws.max_row
+        mc = ws.max_column
+        for cell in ws[mr:mc]:
+            cell.font = Font(size=11)
+        bar(.60)
+        # Set header row style
+        for cell in ws["1:1"]:
+            cell.font = Font(size=12)
+            cell.style = 'Accent1'
+            cell.alignment = Alignment(wrapText='True',horizontal='center')
+        bar(.80)
+        #set column width to 15 with loop
+        for col in range(1, 30):
+            ws.column_dimensions[(get_column_letter(col))].width = 15
+            ws.freeze_panes = "A2"
+
+        #Save the excel file
+        bar(1)
+        wb.save(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
+        bar()
+    print('Export Completed')
+
 
 
 def all():
@@ -261,19 +918,19 @@ dispatcher = {
     'all': all
 }
 print('Following choices are available: \n \
-    1 - function one, \n\
-    2 - function two , \n\
-    3 - function three, \n\
-    4 - run all four, \n\
-    5 - function five, \n\
-    6 - function six, \n\
-    7 - function seven, \n\
-    8 - function eigh, \n\
-    9 - function nine, \n\
-    10 - function ten, \n\
-    11 - function eleven, \n\
-    12 - function twelve, \n\
-    13 - function thirteen, \n\
+    1 - Payments, \n\
+    2 - CCT , \n\
+    3 - Charges and adjustments, \n\
+    4 - Discrepant rates, \n\
+    5 - DNR 1, \n\
+    6 - DNR 2, \n\
+    7 - DNR 3, \n\
+    8 - GRTS and GSTCRT, \n\
+    9 - Guest Email, \n\
+    10 - LLDB, \n\
+    11 - Payments and Refunds, \n\
+    12 - Prop overview, \n\
+    13 - Room Moves, \n\
     ')
 
 action = input('Option: - ')
