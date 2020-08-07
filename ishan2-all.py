@@ -12,10 +12,14 @@ from alive_progress import alive_bar
 import sys
 import subprocess
 import time
-from openpyxl import *
-from openpyxl.styles import *
-from openpyxl.utils import get_column_letter
-from openpyxl.workbook import Workbook
+#from openpyxl import *
+#from openpyxl.styles import *
+#from openpyxl.utils import get_column_letter
+#from openpyxl.workbook import Workbook
+import openpyxl
+import openpyxl.styles
+import openpyxl.utils
+import openpyxl.workbook
 
 #Input file names without extension
 #Example: 'Payments-Jun'
@@ -35,8 +39,8 @@ v_room_moves = 'Room_Moves_Jun'
 
 def payments():
 
-    print('Running one function')
-    filehandler_path = open('Payments-Jun.csv', 'r')
+    #print('Running one function')
+    filehandler_path ='Payments-Jun.csv'
     print(filehandler_path)
     output_path='./temp'
 
@@ -62,7 +66,7 @@ def payments():
         if not os.path.exists('Export'):
             os.makedirs('Export')
 
-        reader = csv.reader(filehandler, delimiter=delimiter)
+        reader = csv.reader(open(filehandler,'r'), delimiter=delimiter)
         current_piece = 1
         current_out_path = os.path.join(
              output_path,
@@ -142,9 +146,11 @@ def payments():
     styl()
     cleanup()
 
-
-
 def chg_and_adj():
+    import openpyxl
+    from openpyxl.reader.excel import load_workbook
+    from openpyxl.styles import Font, Alignment 
+    from openpyxl.utils import get_column_letter
     print('Processing Charges and Adjustments Report')
     ## DECLARE VARIABLES
     #Source vars
@@ -176,7 +182,7 @@ def chg_and_adj():
     fd_name = './Export/'+'Charges and Adjustments'+prev_mon+'.xlsx'
 
     #main prog
-    with alive_bar(total=100, manual='True',title='Report 1',theme='smooth',bar='blocks') as bar:   # default setting
+    with alive_bar(total=100, manual='True',title='Charges and Adjustments',theme='smooth',bar='blocks',spinner='classic') as bar:   # default setting
 
         ## Report 1 - 
         #convert csv to xlsx using pandas lib
@@ -211,11 +217,14 @@ def chg_and_adj():
         #Save the excel file
         bar(1)
         wb.save(fd_name)
-        bar()
-    print('Export Completed')
-
+        
+    print('Export Completed\n')
 
 def cct():
+    import openpyxl
+    from openpyxl.reader.excel import load_workbook
+    from openpyxl.styles import Font, Alignment 
+    from openpyxl.utils import get_column_letter
     print('Processing CCT Info Report')
     ## DECLARE VARIABLES
     #Source vars
@@ -231,23 +240,33 @@ def cct():
         os.makedirs(wd_name)
 
 
+
     #Dest vars
-    fd_path = fs_path
-    fd_name = wd_name
-    fd_ext = ".xlsx"
+    #fd_path = fs_path
+    #fd_name = wd_name
+    #fd_ext = ".xlsx"
+    # Returns the same day of last month if possible otherwise end of month
+    # (eg: March 31st->29th Feb an July 31st->June 30th)
+    last_month = datetime.now() - relativedelta(months=1)
+    # Create string of month name and year...
+    text = format(last_month, '%B %Y')
+    prev_mon = '['+text+']'
+
+    #print(prev_mon)
+    fd_name = './Export/'+'CCT Information'+prev_mon+'.xlsx'
 
     #main prog
-    with alive_bar(5, manual=True,title='Report 1',theme='smooth',bar='blocks') as bar:   # default setting
+    with alive_bar(total=100, manual=True,title='CCT Information',theme='smooth',bar='blocks',spinner='classic') as bar:   # default setting
 
         ## Report 1 - 
         #convert csv to xlsx using pandas lib
         read_file = pd.read_csv (''r''+fs_path+'/'+fs_name+fs_ext,sep="\t")
         bar(.10)
-        read_file.to_excel (''r''+fd_path+'/'+fd_name+'/'+fs_name+fd_ext, index = None, header=True)
+        read_file.to_excel (''r''+fd_name, index = None, header=True)
         bar(.20)
         #read xlsx
         #assign the excel file to wb() variable
-        wb=load_workbook(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
+        wb=load_workbook(fd_name)
         bar(.30)
 
         #assign the worksheet of the workbook to a ws() variable
@@ -279,12 +298,15 @@ def cct():
             ws.freeze_panes = "A2"
         #Save the excel file
         bar(1)
-        wb.save(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
-        bar()
-    print('Export Completed')
-
+        wb.save(fd_name)
+        
+    print('Export Completed\n')
 
 def discp_rates():
+    import openpyxl
+    from openpyxl.reader.excel import load_workbook
+    from openpyxl.styles import Font, Alignment 
+    from openpyxl.utils import get_column_letter
     print('Processing Report 1')
     ## DECLARE VARIABLES
     #Source vars
@@ -300,23 +322,33 @@ def discp_rates():
         os.makedirs(wd_name)
 
 
+
     #Dest vars
-    fd_path = fs_path
-    fd_name = wd_name
-    fd_ext = ".xlsx"
+    #fd_path = fs_path
+    #fd_name = wd_name
+    #fd_ext = ".xlsx"
+    # Returns the same day of last month if possible otherwise end of month
+    # (eg: March 31st->29th Feb an July 31st->June 30th)
+    last_month = datetime.now() - relativedelta(months=1)
+    # Create string of month name and year...
+    text = format(last_month, '%B %Y')
+    prev_mon = '['+text+']'
+
+    #print(prev_mon)
+    fd_name = './Export/'+'Discrepant Rates'+prev_mon+'.xlsx'
 
     #main prog
-    with alive_bar(5, manual=True,title='Report 1',theme='smooth',bar='blocks') as bar:   # default setting
+    with alive_bar(total=100, manual=True,title='Discrepant Rates',theme='smooth',bar='blocks',spinner='classic') as bar:   # default setting
 
         ## Report 1 - 
         #convert csv to xlsx using pandas lib
         read_file = pd.read_csv (''r''+fs_path+'/'+fs_name+fs_ext,sep="\t")
         bar(.10)
-        read_file.to_excel (''r''+fd_path+'/'+fd_name+'/'+fs_name+fd_ext, index = None, header=True)
+        read_file.to_excel (''r''+fd_name, index = None, header=True)
         bar(.20)
         #read xlsx
         #assign the excel file to wb() variable
-        wb=load_workbook(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
+        wb=load_workbook(fd_name)
         bar(.30)
 
         #assign the worksheet of the workbook to a ws() variable
@@ -339,11 +371,15 @@ def discp_rates():
             ws.freeze_panes = "A2"
         #Save the excel file
         bar(1)
-        wb.save(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
-        bar()
-    print('Export Completed')
+        wb.save(fd_name)
+        
+    print('Export Completed\n')
 
 def dnr1():
+    import openpyxl
+    from openpyxl.reader.excel import load_workbook
+    from openpyxl.styles import Font, Alignment 
+    from openpyxl.utils import get_column_letter
     print('Processing Report 1')
     ## DECLARE VARIABLES
     #Source vars
@@ -359,23 +395,32 @@ def dnr1():
         os.makedirs(wd_name)
 
 
-    #Dest vars
-    fd_path = fs_path
-    fd_name = wd_name
-    fd_ext = ".xlsx"
 
+    #Dest vars
+    #fd_path = fs_path
+    #fd_name = wd_name
+    #fd_ext = ".xlsx"
+    # Returns the same day of last month if possible otherwise end of month
+    # (eg: March 31st->29th Feb an July 31st->June 30th)
+    last_month = datetime.now() - relativedelta(months=1)
+    # Create string of month name and year...
+    text = format(last_month, '%B %Y')
+    prev_mon = '['+text+']'
+
+    #print(prev_mon)
+    fd_name = './Export/'+'DNR 1'+prev_mon+'.xlsx'
     #main prog
-    with alive_bar(5, manual=True,title='Report 1',theme='smooth',bar='blocks') as bar:   # default setting
+    with alive_bar(total=100, manual=True,title='DNR 1',theme='smooth',bar='blocks',spinner='classic') as bar:   # default setting
 
         ## Report 1 - 
         #convert csv to xlsx using pandas lib
         read_file = pd.read_csv (''r''+fs_path+'/'+fs_name+fs_ext,sep="\t")
         bar(.10)
-        read_file.to_excel (''r''+fd_path+'/'+fd_name+'/'+fs_name+fd_ext, index = None, header=True)
+        read_file.to_excel (''r''+fd_name, index = None, header=True)
         bar(.20)
         #read xlsx
         #assign the excel file to wb() variable
-        wb=load_workbook(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
+        wb=load_workbook(fd_name)
         bar(.30)
 
         #assign the worksheet of the workbook to a ws() variable
@@ -398,11 +443,15 @@ def dnr1():
             ws.freeze_panes = "A2"
         #Save the excel file
         bar(1)
-        wb.save(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
-        bar()
-    print('Export Completed')
+        wb.save(fd_name)
+        
+    print('Export Completed\n')
 
 def dnr2():
+    import openpyxl
+    from openpyxl.reader.excel import load_workbook
+    from openpyxl.styles import Font, Alignment 
+    from openpyxl.utils import get_column_letter
     print('Processing Report 1')
     ## DECLARE VARIABLES
     #Source vars
@@ -418,23 +467,33 @@ def dnr2():
         os.makedirs(wd_name)
 
 
+
     #Dest vars
-    fd_path = fs_path
-    fd_name = wd_name
-    fd_ext = ".xlsx"
+    #fd_path = fs_path
+    #fd_name = wd_name
+    #fd_ext = ".xlsx"
+    # Returns the same day of last month if possible otherwise end of month
+    # (eg: March 31st->29th Feb an July 31st->June 30th)
+    last_month = datetime.now() - relativedelta(months=1)
+    # Create string of month name and year...
+    text = format(last_month, '%B %Y')
+    prev_mon = '['+text+']'
+
+    #print(prev_mon)
+    fd_name = './Export/'+'DNR 2'+prev_mon+'.xlsx'
 
     #main prog
-    with alive_bar(5, manual=True,title='Report 1',theme='smooth',bar='blocks') as bar:   # default setting
+    with alive_bar(total=100, manual=True,title='DNR 1',theme='smooth',bar='blocks',spinner='classic') as bar:   # default setting
 
         ## Report 1 - 
         #convert csv to xlsx using pandas lib
         read_file = pd.read_csv (''r''+fs_path+'/'+fs_name+fs_ext,sep="\t")
         bar(.10)
-        read_file.to_excel (''r''+fd_path+'/'+fd_name+'/'+fs_name+fd_ext, index = None, header=True)
+        read_file.to_excel (''r''+fd_name, index = None, header=True)
         bar(.20)
         #read xlsx
         #assign the excel file to wb() variable
-        wb=load_workbook(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
+        wb=load_workbook(fd_name)
         bar(.30)
 
         #assign the worksheet of the workbook to a ws() variable
@@ -459,11 +518,15 @@ def dnr2():
 
         #Save the excel file
         bar(1)
-        wb.save(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
-        bar()
-    print('Export Completed')
+        wb.save(fd_name)
+        
+    print('Export Completed\n')
 
 def dnr3():
+    import openpyxl
+    from openpyxl.reader.excel import load_workbook
+    from openpyxl.styles import Font, Alignment 
+    from openpyxl.utils import get_column_letter
     print('Processing Report 1')
     ## DECLARE VARIABLES
     #Source vars
@@ -478,24 +541,31 @@ def dnr3():
     if not os.path.exists(wd_name):
         os.makedirs(wd_name)
 
-
     #Dest vars
-    fd_path = fs_path
-    fd_name = wd_name
-    fd_ext = ".xlsx"
+    #fd_path = fs_path
+    #fd_name = wd_name
+    #fd_ext = ".xlsx"
+    # Returns the same day of last month if possible otherwise end of month
+    # (eg: March 31st->29th Feb an July 31st->June 30th)
+    last_month = datetime.now() - relativedelta(months=1)
+    # Create string of month name and year...
+    text = format(last_month, '%B %Y')
+    prev_mon = '['+text+']'
 
+    #print(prev_mon)
+    fd_name = './Export/'+'DNR 3'+prev_mon+'.xlsx'
     #main prog
-    with alive_bar(5, manual=True,title='Report 1',theme='smooth',bar='blocks') as bar:   # default setting
+    with alive_bar(total=100, manual=True,title='DNR 1',theme='smooth',bar='blocks',spinner='classic') as bar:   # default setting
 
         ## Report 1 - 
         #convert csv to xlsx using pandas lib
         read_file = pd.read_csv (''r''+fs_path+'/'+fs_name+fs_ext,sep="\t")
         bar(.10)
-        read_file.to_excel (''r''+fd_path+'/'+fd_name+'/'+fs_name+fd_ext, index = None, header=True)
+        read_file.to_excel (''r''+fd_name, index = None, header=True)
         bar(.20)
         #read xlsx
         #assign the excel file to wb() variable
-        wb=load_workbook(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
+        wb=load_workbook(fd_name)
         bar(.30)
 
         #assign the worksheet of the workbook to a ws() variable
@@ -518,11 +588,15 @@ def dnr3():
             ws.freeze_panes = "A2"
         #Save the excel file
         bar(1)
-        wb.save(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
-        bar()
-    print('Export Completed')
+        wb.save(fd_name)
+        
+    print('Export Completed\n')
 
 def grts_and_gst():
+    import openpyxl
+    from openpyxl.reader.excel import load_workbook
+    from openpyxl.styles import Font, Alignment 
+    from openpyxl.utils import get_column_letter
     print('Processing Gratis & GSTCERT Report')
     ## DECLARE VARIABLES
     #Source vars
@@ -537,24 +611,32 @@ def grts_and_gst():
     if not os.path.exists(wd_name):
         os.makedirs(wd_name)
 
-
     #Dest vars
-    fd_path = fs_path
-    fd_name = wd_name
-    fd_ext = ".xlsx"
+    #fd_path = fs_path
+    #fd_name = wd_name
+    #fd_ext = ".xlsx"
+    # Returns the same day of last month if possible otherwise end of month
+    # (eg: March 31st->29th Feb an July 31st->June 30th)
+    last_month = datetime.now() - relativedelta(months=1)
+    # Create string of month name and year...
+    text = format(last_month, '%B %Y')
+    prev_mon = '['+text+']'
+
+    #print(prev_mon)
+    fd_name = './Export/'+'GRATIS and GSTCERT'+prev_mon+'.xlsx'
 
     #main prog
-    with alive_bar(5, manual=True,title='Report 1',theme='smooth',bar='blocks') as bar:   # default setting
+    with alive_bar(total=100, manual=True,title='GRATIS and GSTCERT 1',theme='smooth',bar='blocks',spinner='classic') as bar:   # default setting
 
         ## Report 1 - 
         #convert csv to xlsx using pandas lib
         read_file = pd.read_csv (''r''+fs_path+'/'+fs_name+fs_ext,sep="\t")
         bar(.10)
-        read_file.to_excel (''r''+fd_path+'/'+fd_name+'/'+fs_name+fd_ext, index = None, header=True)
+        read_file.to_excel (''r''+fd_name, index = None, header=True)
         bar(.20)
         #read xlsx
         #assign the excel file to wb() variable
-        wb=load_workbook(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
+        wb=load_workbook(fd_name)
         bar(.30)
 
         #assign the worksheet of the workbook to a ws() variable
@@ -578,11 +660,15 @@ def grts_and_gst():
 
         #Save the excel file
         bar(1)
-        wb.save(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
-        bar()
-    print('Export Completed')
+        wb.save(fd_name)
+        
+    print('Export Completed\n')
 
 def gst_email():
+    import openpyxl
+    from openpyxl.reader.excel import load_workbook
+    from openpyxl.styles import Font, Alignment 
+    from openpyxl.utils import get_column_letter
     print('Processing Report 1')
     ## DECLARE VARIABLES
     #Source vars
@@ -598,23 +684,32 @@ def gst_email():
         os.makedirs(wd_name)
 
 
+
     #Dest vars
-    fd_path = fs_path
-    fd_name = wd_name
-    fd_ext = ".xlsx"
+    #fd_path = fs_path
+    #fd_name = wd_name
+    #fd_ext = ".xlsx"
+    # Returns the same day of last month if possible otherwise end of month
+    # (eg: March 31st->29th Feb an July 31st->June 30th)
+    last_month = datetime.now() - relativedelta(months=1)
+    # Create string of month name and year...
+    text = format(last_month, '%B %Y')
+    prev_mon = '['+text+']'
+    #print(prev_mon)
+    fd_name = './Export/'+'Guest Email'+prev_mon+'.xlsx'
 
     #main prog
-    with alive_bar(5, manual=True,title='Report 1',theme='smooth',bar='blocks') as bar:   # default setting
+    with alive_bar(total=100, manual=True,title='Guest Email',theme='smooth',bar='blocks',spinner='classic') as bar:   # default setting
 
         ## Report 1 - 
         #convert csv to xlsx using pandas lib
         read_file = pd.read_csv (''r''+fs_path+'/'+fs_name+fs_ext,sep="\t")
         bar(.10)
-        read_file.to_excel (''r''+fd_path+'/'+fd_name+'/'+fs_name+fd_ext, index = None, header=True)
+        read_file.to_excel (''r''+fd_name, index = None, header=True)
         bar(.20)
         #read xlsx
         #assign the excel file to wb() variable
-        wb=load_workbook(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
+        wb=load_workbook(fd_name)
         bar(.30)
 
         #assign the worksheet of the workbook to a ws() variable
@@ -638,11 +733,15 @@ def gst_email():
 
         #Save the excel file
         bar(1)
-        wb.save(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
-        bar()
-    print('Export Completed')
+        wb.save(fd_name)
+        
+    print('Export Completed\n')
 
 def lldb():
+    import openpyxl
+    from openpyxl.reader.excel import load_workbook
+    from openpyxl.styles import Font, Alignment 
+    from openpyxl.utils import get_column_letter
     print('Processing Report 1')
     ## DECLARE VARIABLES
     #Source vars
@@ -659,22 +758,30 @@ def lldb():
 
 
     #Dest vars
-    fd_path = fs_path
-    fd_name = wd_name
-    fd_ext = ".xlsx"
+    #fd_path = fs_path
+    #fd_name = wd_name
+    #fd_ext = ".xlsx"
+    # Returns the same day of last month if possible otherwise end of month
+    # (eg: March 31st->29th Feb an July 31st->June 30th)
+    last_month = datetime.now() - relativedelta(months=1)
+    # Create string of month name and year...
+    text = format(last_month, '%B %Y')
+    prev_mon = '['+text+']'
+    #print(prev_mon)
+    fd_name = './Export/'+'LLDB'+prev_mon+'.xlsx'
 
     #main prog
-    with alive_bar(5, manual=True,title='Report 1',theme='smooth',bar='blocks') as bar:   # default setting
+    with alive_bar(total=100, manual=True,title='LLDB',theme='smooth',bar='blocks',spinner='classic') as bar:   # default setting
 
         ## Report 1 - 
         #convert csv to xlsx using pandas lib
         read_file = pd.read_csv (''r''+fs_path+'/'+fs_name+fs_ext,sep='\t',header=0,names=['Property Code','Confirmation Number', 'Checkin Date','Checkout Date','Company Name','Total Charges','External Confirmation No'])
         bar(.10)
-        read_file.to_excel (''r''+fd_path+'/'+fd_name+'/'+fs_name+fd_ext, index = None, header=True)
+        read_file.to_excel (''r''+fd_name, index = None, header=True)
         bar(.20)
         #read xlsx
         #assign the excel file to wb() variable
-        wb=load_workbook(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
+        wb=load_workbook(fd_name)
         bar(.30)
 
         #assign the worksheet of the workbook to a ws() variable
@@ -698,11 +805,15 @@ def lldb():
 
         #Save the excel file
         bar(1)
-        wb.save(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
-        bar()
-    print('Export Completed')
+        wb.save(fd_name)
+        
+    print('Export Completed\n')
 
 def pay_and_ref():
+    import openpyxl
+    from openpyxl.reader.excel import load_workbook
+    from openpyxl.styles import Font, Alignment 
+    from openpyxl.utils import get_column_letter
     print('Processing Report 1')
     ## DECLARE VARIABLES
     #Source vars
@@ -717,24 +828,31 @@ def pay_and_ref():
     if not os.path.exists(wd_name):
         os.makedirs(wd_name)
 
-
     #Dest vars
-    fd_path = fs_path
-    fd_name = wd_name
-    fd_ext = ".xlsx"
+    #fd_path = fs_path
+    #fd_name = wd_name
+    #fd_ext = ".xlsx"
+    # Returns the same day of last month if possible otherwise end of month
+    # (eg: March 31st->29th Feb an July 31st->June 30th)
+    last_month = datetime.now() - relativedelta(months=1)
+    # Create string of month name and year...
+    text = format(last_month, '%B %Y')
+    prev_mon = '['+text+']'
+    #print(prev_mon)
+    fd_name = './Export/'+'Payments and Refunds'+prev_mon+'.xlsx'
 
     #main prog
-    with alive_bar(5, manual=True,title='Report 1',theme='smooth',bar='blocks') as bar:   # default setting
+    with alive_bar(total=100, manual=True,title='Payments and Refunds',theme='smooth',bar='blocks',spinner='classic') as bar:   # default setting
 
         ## Report 1 - 
         #convert csv to xlsx using pandas lib
         read_file = pd.read_csv (''r''+fs_path+'/'+fs_name+fs_ext,sep="\t")
         bar(.10)
-        read_file.to_excel (''r''+fd_path+'/'+fd_name+'/'+fs_name+fd_ext, index = None, header=True)
+        read_file.to_excel (''r''+fd_name, index = None, header=True)
         bar(.20)
         #read xlsx
         #assign the excel file to wb() variable
-        wb=load_workbook(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
+        wb=load_workbook(fd_name)
         bar(.30)
 
         #assign the worksheet of the workbook to a ws() variable
@@ -758,11 +876,15 @@ def pay_and_ref():
 
         #Save the excel file
         bar(1)
-        wb.save(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
-        bar()
-    print('Export Completed')
+        wb.save(fd_name)
+        
+    print('Export Completed\n')
 
 def prop_over():
+    import openpyxl
+    from openpyxl.reader.excel import load_workbook
+    from openpyxl.styles import Font, Alignment 
+    from openpyxl.utils import get_column_letter
     print('Processing Report 1')
     ## DECLARE VARIABLES
     #Source vars
@@ -779,22 +901,29 @@ def prop_over():
 
 
     #Dest vars
-    fd_path = fs_path
-    fd_name = wd_name
-    fd_ext = ".xlsx"
-
+    #fd_path = fs_path
+    #fd_name = wd_name
+    #fd_ext = ".xlsx"
+    # Returns the same day of last month if possible otherwise end of month
+    # (eg: March 31st->29th Feb an July 31st->June 30th)
+    last_month = datetime.now() - relativedelta(months=1)
+    # Create string of month name and year...
+    text = format(last_month, '%B %Y')
+    prev_mon = '['+text+']'
+    #print(prev_mon)
+    fd_name = './Export/'+'Property Overview'+prev_mon+'.xlsx'
     #main prog
-    with alive_bar(5, manual=True,title='Report 1',theme='smooth',bar='blocks') as bar:   # default setting
+    with alive_bar(total=100, manual=True,title='Property Overview',theme='smooth',bar='blocks',spinner='classic') as bar:   # default setting
 
         ## Report 1 - 
         #convert csv to xlsx using pandas lib
         read_file = pd.read_csv (''r''+fs_path+'/'+fs_name+fs_ext,sep="\t")
         bar(.10)
-        read_file.to_excel (''r''+fd_path+'/'+fd_name+'/'+fs_name+fd_ext, index = None, header=True)
+        read_file.to_excel (''r''+fd_name, index = None, header=True)
         bar(.20)
         #read xlsx
         #assign the excel file to wb() variable
-        wb=load_workbook(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
+        wb=load_workbook(fd_name)
         bar(.30)
 
         #assign the worksheet of the workbook to a ws() variable
@@ -818,11 +947,15 @@ def prop_over():
 
         #Save the excel file
         bar(1)
-        wb.save(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
-        bar()
-    print('Export Completed')
+        wb.save(fd_name)
+        
+    print('Export Completed\n')
 
 def room_moves():
+    import openpyxl
+    from openpyxl.reader.excel import load_workbook
+    from openpyxl.styles import Font, Alignment 
+    from openpyxl.utils import get_column_letter
     print('Processing Report 1')
     ## DECLARE VARIABLES
     #Source vars
@@ -839,22 +972,30 @@ def room_moves():
 
 
     #Dest vars
-    fd_path = fs_path
-    fd_name = wd_name
-    fd_ext = ".xlsx"
+    #fd_path = fs_path
+    #fd_name = wd_name
+    #fd_ext = ".xlsx"
+    # Returns the same day of last month if possible otherwise end of month
+    # (eg: March 31st->29th Feb an July 31st->June 30th)
+    last_month = datetime.now() - relativedelta(months=1)
+    # Create string of month name and year...
+    text = format(last_month, '%B %Y')
+    prev_mon = '['+text+']'
+    #print(prev_mon)
+    fd_name = './Export/'+'Room Moves'+prev_mon+'.xlsx'
 
     #main prog
-    with alive_bar(5, manual=True,title='Report 1',theme='smooth',bar='blocks') as bar:   # default setting
+    with alive_bar(total=100, manual=True,title='Room Moves',theme='smooth',bar='blocks',spinner='classic') as bar:   # default setting
 
         ## Report 1 - 
         #convert csv to xlsx using pandas lib
         read_file = pd.read_csv (''r''+fs_path+'/'+fs_name+fs_ext,sep="\t")
         bar(.10)
-        read_file.to_excel (''r''+fd_path+'/'+fd_name+'/'+fs_name+fd_ext, index = None, header=True)
+        read_file.to_excel (''r''+fd_name, index = None, header=True)
         bar(.20)
         #read xlsx
         #assign the excel file to wb() variable
-        wb=load_workbook(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
+        wb=load_workbook(fd_name)
         bar(.30)
 
         #assign the worksheet of the workbook to a ws() variable
@@ -878,15 +1019,18 @@ def room_moves():
 
         #Save the excel file
         bar(1)
-        wb.save(fd_path+'/'+fd_name+'/'+fs_name+fd_ext)
-        bar()
-    print('Export Completed')
+        wb.save(fd_name)
+        
+    print('Export Completed\n')
 
-
+def clean():
+    if os.path.exists('Export'):
+        shutil.rmtree('Export')
 
 def all():
     print('Processing all reports')
-    payments()
+    clean()
+    #payments()
     cct()
     chg_and_adj()
     discp_rates()
@@ -900,6 +1044,7 @@ def all():
     prop_over()
     room_moves()
     
+
 
 dispatcher = {
     '1': payments,
@@ -917,22 +1062,23 @@ dispatcher = {
     '13': room_moves,
     'all': all
 }
-print('Following choices are available: \n \
-    1 - Payments, \n\
-    2 - CCT , \n\
-    3 - Charges and adjustments, \n\
-    4 - Discrepant rates, \n\
-    5 - DNR 1, \n\
-    6 - DNR 2, \n\
-    7 - DNR 3, \n\
-    8 - GRTS and GSTCRT, \n\
-    9 - Guest Email, \n\
-    10 - LLDB, \n\
-    11 - Payments and Refunds, \n\
-    12 - Prop overview, \n\
-    13 - Room Moves, \n\
+print('Following choices are available:\n\
+    1 - Payments\n\
+    2 - CCT\n\
+    3 - Charges and adjustments\n\
+    4 - Discrepant rates\n\
+    5 - DNR 1\n\
+    6 - DNR 2\n\
+    7 - DNR 3\n\
+    8 - GRTS and GSTCRT\n\
+    9 - Guest Email\n\
+    10 - LLDB\n\
+    11 - Payments and Refunds\n\
+    12 - Prop overview\n\
+    13 - Room Moves\n\
     ')
 
 action = input('Option: - ')
 
 dispatcher[action]()
+
