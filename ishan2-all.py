@@ -12,10 +12,6 @@ from alive_progress import alive_bar
 import sys
 import subprocess
 import time
-#from openpyxl import *
-#from openpyxl.styles import *
-#from openpyxl.utils import get_column_letter
-#from openpyxl.workbook import Workbook
 import openpyxl
 import openpyxl.styles
 import openpyxl.utils
@@ -307,7 +303,7 @@ def discp_rates():
     from openpyxl.reader.excel import load_workbook
     from openpyxl.styles import Font, Alignment 
     from openpyxl.utils import get_column_letter
-    print('Processing Report 1')
+    print('Processing Discrepant Rates')
     ## DECLARE VARIABLES
     #Source vars
     fs_path = os.getcwd()
@@ -380,7 +376,7 @@ def dnr1():
     from openpyxl.reader.excel import load_workbook
     from openpyxl.styles import Font, Alignment 
     from openpyxl.utils import get_column_letter
-    print('Processing Report 1')
+    print('Processing DNR 1 Report')
     ## DECLARE VARIABLES
     #Source vars
     fs_path = os.getcwd()
@@ -452,7 +448,7 @@ def dnr2():
     from openpyxl.reader.excel import load_workbook
     from openpyxl.styles import Font, Alignment 
     from openpyxl.utils import get_column_letter
-    print('Processing Report 1')
+    print('Processing DNR 2 Report')
     ## DECLARE VARIABLES
     #Source vars
     fs_path = os.getcwd()
@@ -527,7 +523,7 @@ def dnr3():
     from openpyxl.reader.excel import load_workbook
     from openpyxl.styles import Font, Alignment 
     from openpyxl.utils import get_column_letter
-    print('Processing Report 1')
+    print('Processing DNR 3 Report')
     ## DECLARE VARIABLES
     #Source vars
     fs_path = os.getcwd()
@@ -597,7 +593,7 @@ def grts_and_gst():
     from openpyxl.reader.excel import load_workbook
     from openpyxl.styles import Font, Alignment 
     from openpyxl.utils import get_column_letter
-    print('Processing Gratis & GSTCERT Report')
+    print('Processing GRATIS & GSTCERT Report')
     ## DECLARE VARIABLES
     #Source vars
     fs_path = os.getcwd()
@@ -669,7 +665,7 @@ def gst_email():
     from openpyxl.reader.excel import load_workbook
     from openpyxl.styles import Font, Alignment 
     from openpyxl.utils import get_column_letter
-    print('Processing Report 1')
+    print('Processing Guest Email Report')
     ## DECLARE VARIABLES
     #Source vars
     fs_path = os.getcwd()
@@ -742,7 +738,7 @@ def lldb():
     from openpyxl.reader.excel import load_workbook
     from openpyxl.styles import Font, Alignment 
     from openpyxl.utils import get_column_letter
-    print('Processing Report 1')
+    print('Processing LLDB Report')
     ## DECLARE VARIABLES
     #Source vars
     fs_path = os.getcwd()
@@ -814,7 +810,7 @@ def pay_and_ref():
     from openpyxl.reader.excel import load_workbook
     from openpyxl.styles import Font, Alignment 
     from openpyxl.utils import get_column_letter
-    print('Processing Report 1')
+    print('Processing Payments & Refunds Report')
     ## DECLARE VARIABLES
     #Source vars
     fs_path = os.getcwd()
@@ -885,7 +881,7 @@ def prop_over():
     from openpyxl.reader.excel import load_workbook
     from openpyxl.styles import Font, Alignment 
     from openpyxl.utils import get_column_letter
-    print('Processing Report 1')
+    print('Processing Property Overview Report')
     ## DECLARE VARIABLES
     #Source vars
     fs_path = os.getcwd()
@@ -956,7 +952,7 @@ def room_moves():
     from openpyxl.reader.excel import load_workbook
     from openpyxl.styles import Font, Alignment 
     from openpyxl.utils import get_column_letter
-    print('Processing Report 1')
+    print('Processing Room Moves Report')
     ## DECLARE VARIABLES
     #Source vars
     fs_path = os.getcwd()
