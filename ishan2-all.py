@@ -35,7 +35,6 @@ v_room_moves = 'Room_Moves_Jun'
 
 def payments():
 
-    #print('Running one function')
     filehandler_path ='Payments-Jun.csv'
     print(filehandler_path)
     output_path='./temp'
@@ -89,30 +88,27 @@ def payments():
         return filehandler
 
 
+
     # join multiple csv to a single workbook with diff worksheets
     def split_join():
-        print ('Joining files')
+        from pathlib import Path
         # Returns the same day of last month if possible otherwise end of month
         # (eg: March 31st->29th Feb an July 31st->June 30th)
         last_month = datetime.now() - relativedelta(months=1)
         # Create string of month name and year...
         text = format(last_month, '%B %Y')
         prev_mon = '['+text+']'
-
-        #print(prev_mon)
         fname = './Export/'+'Payments'+prev_mon+'.xlsx'
         writer = pd.ExcelWriter(fname, engine='xlsxwriter')
-        folders = next(os.walk('.'))[1]
-        for host in folders:
-            Path = os.path.join(os.getcwd(), host)
-            for f in glob.glob(os.path.join(Path, "Payments_*.csv")):
-                #print(f)
-                df = pd.read_csv(f,sep="\t",low_memory=False)
-                df.to_excel(writer, index=False,sheet_name=os.path.basename(f)[:31])
+        folders = 'temp'
+        with alive_bar(title='Combining csv',theme='smooth',bar='blocks',spinner='classic') as bar2:
+            myPath = os.path.join(os.getcwd(), folders)
+            for myPath in Path(myPath).rglob('*.csv'):
+                df = pd.read_csv(myPath,sep="\t",low_memory=False)
+                bar2()
+                df.to_excel(writer, index=False,sheet_name=os.path.basename(myPath)[:31])
             writer.save()
         return fname
-
-
 
     def styl():
         import openpyxl
@@ -161,7 +157,6 @@ def chg_and_adj():
     #exp_dir=os.mkdir(wd_name)
     if not os.path.exists(wd_name):
         os.makedirs(wd_name)
-
 
     #Dest vars
     #fd_path = fs_path
