@@ -152,7 +152,6 @@ def payments():
         from openpyxl.styles import Font, Alignment
         from openpyxl.utils import get_column_letter
 
-        print("Applying Styles")
         # Returns the same day of last month if possible otherwise end of month
         # (eg: March 31st->29th Feb an July 31st->June 30th)
         last_month = datetime.now() - relativedelta(months=1)
