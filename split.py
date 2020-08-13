@@ -18,7 +18,7 @@ import openpyxl.utils
 import openpyxl.workbook
 
 # Input file names without extension
-# Example: 'Payments-Jun'
+# Example: "Payments-Jun"
 v_chg_and_adj = "Charges_And_Adjustment_Jun"
 v_payments = "Payments-Jun"
 v_cct = "CCT-Information-Jun"
@@ -36,7 +36,6 @@ v_room_moves = "Room_Moves_Jun"
 
 def payments():
 
-    # print('Running one function')
     filehandler_path = "Payments-Jun.csv"
     print(filehandler_path)
     output_path = "./temp"
@@ -122,7 +121,6 @@ def payments():
     def split_join():
         from pathlib import Path
 
-        # print ('Joining files')
         # Returns the same day of last month if possible otherwise end of month
         # (eg: March 31st->29th Feb an July 31st->June 30th)
         last_month = datetime.now() - relativedelta(months=1)
@@ -159,7 +157,6 @@ def payments():
         text = format(last_month, "%B %Y")
         prev_mon = "[" + text + "]"
         fname = "./Export/" + "Payments" + prev_mon + ".xlsx"
-        # print(fname)
         wb = load_workbook(fname)
         for ws in wb.worksheets:
             mr = ws.max_row
@@ -173,13 +170,11 @@ def payments():
             for cell in ws[mr:mc]:
                 cell.font = Font(size=11)
                 bar3()
-            # with alive_bar(title='Applying Header Styles',theme='smooth',bar='blocks',spinner='classic') as bar4:
             for cell in ws["1:1"]:
                 cell.font = Font(size=12)
                 cell.style = "Accent1"
                 cell.alignment = Alignment(wrapText="True", horizontal="center")
                 # bar4()
-            # with alive_bar(title='Applying Column Styles',theme='smooth',bar='blocks',spinner='classic') as bar5:
             for col in range(1, 30):
                 ws.column_dimensions[(get_column_letter(col))].width = 15
                 ws.freeze_panes = "A2"
@@ -210,14 +205,9 @@ def chg_and_adj():
     ##Create working directory
     wd_name = "Export"
     wd = os.getcwd()
-    # exp_dir=os.mkdir(wd_name)
     if not os.path.exists(wd_name):
         os.makedirs(wd_name)
 
-    # Dest vars
-    # fd_path = fs_path
-    # fd_name = wd_name
-    # fd_ext = ".xlsx"
     # Returns the same day of last month if possible otherwise end of month
     # (eg: March 31st->29th Feb an July 31st->June 30th)
     last_month = datetime.now() - relativedelta(months=1)
@@ -248,7 +238,6 @@ def chg_and_adj():
         # assign the excel file to wb() variable
         wb = load_workbook(fd_name)
         bar(0.30)
-
         # assign the worksheet of the workbook to a ws() variable
         ws = wb.active
         bar(0.40)
@@ -267,7 +256,6 @@ def chg_and_adj():
         for col in range(1, 30):
             ws.column_dimensions[(get_column_letter(col))].width = 15
             ws.freeze_panes = "A2"
-
         # Save the excel file
         bar(1)
         wb.save(fd_name)
@@ -295,11 +283,7 @@ def cct():
     # exp_dir=os.mkdir(wd_name)
     if not os.path.exists(wd_name):
         os.makedirs(wd_name)
-
-    # Dest vars
-    # fd_path = fs_path
-    # fd_name = wd_name
-    # fd_ext = ".xlsx"
+        
     # Returns the same day of last month if possible otherwise end of month
     # (eg: March 31st->29th Feb an July 31st->June 30th)
     last_month = datetime.now() - relativedelta(months=1)
@@ -385,10 +369,6 @@ def discp_rates():
     if not os.path.exists(wd_name):
         os.makedirs(wd_name)
 
-    # Dest vars
-    # fd_path = fs_path
-    # fd_name = wd_name
-    # fd_ext = ".xlsx"
     # Returns the same day of last month if possible otherwise end of month
     # (eg: March 31st->29th Feb an July 31st->June 30th)
     last_month = datetime.now() - relativedelta(months=1)
@@ -465,10 +445,6 @@ def dnr1():
     if not os.path.exists(wd_name):
         os.makedirs(wd_name)
 
-    # Dest vars
-    # fd_path = fs_path
-    # fd_name = wd_name
-    # fd_ext = ".xlsx"
     # Returns the same day of last month if possible otherwise end of month
     # (eg: March 31st->29th Feb an July 31st->June 30th)
     last_month = datetime.now() - relativedelta(months=1)
@@ -476,7 +452,6 @@ def dnr1():
     text = format(last_month, "%B %Y")
     prev_mon = "[" + text + "]"
 
-    # print(prev_mon)
     fd_name = "./Export/" + "DNR 1" + prev_mon + ".xlsx"
     # main prog
     with alive_bar(
@@ -544,10 +519,6 @@ def dnr2():
     if not os.path.exists(wd_name):
         os.makedirs(wd_name)
 
-    # Dest vars
-    # fd_path = fs_path
-    # fd_name = wd_name
-    # fd_ext = ".xlsx"
     # Returns the same day of last month if possible otherwise end of month
     # (eg: March 31st->29th Feb an July 31st->June 30th)
     last_month = datetime.now() - relativedelta(months=1)
@@ -625,10 +596,6 @@ def dnr3():
     if not os.path.exists(wd_name):
         os.makedirs(wd_name)
 
-    # Dest vars
-    # fd_path = fs_path
-    # fd_name = wd_name
-    # fd_ext = ".xlsx"
     # Returns the same day of last month if possible otherwise end of month
     # (eg: March 31st->29th Feb an July 31st->June 30th)
     last_month = datetime.now() - relativedelta(months=1)
@@ -704,10 +671,6 @@ def grts_and_gst():
     if not os.path.exists(wd_name):
         os.makedirs(wd_name)
 
-    # Dest vars
-    # fd_path = fs_path
-    # fd_name = wd_name
-    # fd_ext = ".xlsx"
     # Returns the same day of last month if possible otherwise end of month
     # (eg: March 31st->29th Feb an July 31st->June 30th)
     last_month = datetime.now() - relativedelta(months=1)
@@ -785,10 +748,6 @@ def gst_email():
     if not os.path.exists(wd_name):
         os.makedirs(wd_name)
 
-    # Dest vars
-    # fd_path = fs_path
-    # fd_name = wd_name
-    # fd_ext = ".xlsx"
     # Returns the same day of last month if possible otherwise end of month
     # (eg: March 31st->29th Feb an July 31st->June 30th)
     last_month = datetime.now() - relativedelta(months=1)
@@ -864,11 +823,7 @@ def lldb():
     # exp_dir=os.mkdir(wd_name)
     if not os.path.exists(wd_name):
         os.makedirs(wd_name)
-
-    # Dest vars
-    # fd_path = fs_path
-    # fd_name = wd_name
-    # fd_ext = ".xlsx"
+        
     # Returns the same day of last month if possible otherwise end of month
     # (eg: March 31st->29th Feb an July 31st->June 30th)
     last_month = datetime.now() - relativedelta(months=1)
@@ -958,10 +913,7 @@ def pay_and_ref():
     if not os.path.exists(wd_name):
         os.makedirs(wd_name)
 
-    # Dest vars
-    # fd_path = fs_path
-    # fd_name = wd_name
-    # fd_ext = ".xlsx"
+
     # Returns the same day of last month if possible otherwise end of month
     # (eg: March 31st->29th Feb an July 31st->June 30th)
     last_month = datetime.now() - relativedelta(months=1)
@@ -1038,10 +990,6 @@ def prop_over():
     if not os.path.exists(wd_name):
         os.makedirs(wd_name)
 
-    # Dest vars
-    # fd_path = fs_path
-    # fd_name = wd_name
-    # fd_ext = ".xlsx"
     # Returns the same day of last month if possible otherwise end of month
     # (eg: March 31st->29th Feb an July 31st->June 30th)
     last_month = datetime.now() - relativedelta(months=1)
