@@ -52,7 +52,7 @@ def payments():
                 bar()
 
     def split(
-        filehandler=filehandler_path,
+        filehandler=filehandler_path+".csv",
         delimiter=",",
         row_limit=300000,
         output_name_template="Payments_%s.csv",
