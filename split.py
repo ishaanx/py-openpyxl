@@ -36,7 +36,7 @@ v_room_moves = "Room_Moves_Jun"
 
 def payments():
 
-    filehandler_path = "Payments-Jun.csv"
+    filehandler_path = v_payments
     print(filehandler_path)
     output_path = "./temp"
 
