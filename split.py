@@ -18,25 +18,25 @@ import openpyxl.utils
 import openpyxl.workbook
 
 # Input file names without extension
-# Example: "Payments-Jun"
-v_chg_and_adj = "Charges_And_Adjustment_Jun"
-v_payments = "Payments-Jun"
-v_cct = "CCT-Information-Jun"
-v_discp_rates = "Discrepant_Rates_Jun"
-v_dnr1 = "DNR-1-Jun"
-v_dnr2 = "DNR-2-Jun"
-v_dnr3 = "DNR-3-Jun"
-v_grts_and_gst = "Gratis_And_GstCert_Report_Jun"
-v_gst_email = "Guest_Email_Jun"
-v_lldb = "LLDB_Jun"
-v_pay_and_ref = "Payments_And_Refunds_Jun"
-v_prop_over = "Property_Overview_Jun"
-v_room_moves = "Room_Moves_Jun"
+# Example: "Payments_Aug_4x"
+v_chg_and_adj = "Charges_And_Adjustment_Aug_4x"
+v_payments = "Payments_Aug_4x"
+v_cct = "CCT_Information_Aug_4x"
+v_discp_rates = "Discrepant_Rates_Aug_4x"
+v_dnr1 = "DNR1"
+v_dnr2 = "DNR-2_Aug_4x"
+v_dnr3 = "DNR-3_Aug_4x"
+v_grts_and_gst = "Gratis_And_GstCert_Report_Aug_4x"
+v_gst_email = "Guest_Email_Aug_4x"
+v_lldb = "LLDB_Aug_4x"
+v_pay_and_ref = "Payments_And_Refunds_Aug_4x"
+v_prop_over = "Property_Overview_Aug_4x"
+v_room_moves = "Room_Moves_Aug_4x"
 
 
 def payments():
 
-    filehandler_path = v_payments
+    filehandler_path = "Payments_Aug_4x.csv"
     print(filehandler_path)
     output_path = "./temp"
 
@@ -52,7 +52,7 @@ def payments():
                 bar()
 
     def split(
-        filehandler=filehandler_path+".csv",
+        filehandler=filehandler_path,
         delimiter=",",
         row_limit=300000,
         output_name_template="Payments_%s.csv",
@@ -167,7 +167,7 @@ def payments():
             bar="blocks",
             spinner="classic",
         ) as bar3:
-            for cell in ws[mr:mc]:
+            for cell in ws["mr:mc"]:
                 cell.font = Font(size=11)
                 bar3()
             for cell in ws["1:1"]:
@@ -230,7 +230,7 @@ def chg_and_adj():
 
         ## Report 1 -
         # convert csv to xlsx using pandas lib
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t")
+        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -243,7 +243,7 @@ def chg_and_adj():
         bar(0.40)
         mr = ws.max_row
         mc = ws.max_column
-        for cell in ws[mr:mc]:
+        for cell in ws["mr:mc"]:
             cell.font = Font(size=11)
         bar(0.60)
         # Set header row style
@@ -306,7 +306,7 @@ def cct():
 
         ## Report 1 -
         # convert csv to xlsx using pandas lib
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t")
+        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -329,7 +329,7 @@ def cct():
         bar(0.40)
         mr = ws.max_row
         mc = ws.max_column
-        for cell in ws[mr:mc]:
+        for cell in ws["mr:mc"]:
             cell.font = Font(size=11)
         bar(0.60)
         # Set header row style
@@ -391,7 +391,7 @@ def discp_rates():
 
         ## Report 1 -
         # convert csv to xlsx using pandas lib
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t")
+        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -405,7 +405,7 @@ def discp_rates():
         bar(0.40)
         mr = ws.max_row
         mc = ws.max_column
-        for cell in ws[mr:mc]:
+        for cell in ws["mr:mc"]:
             cell.font = Font(size=11)
         bar(0.60)
         # Set header row style
@@ -465,9 +465,11 @@ def dnr1():
 
         ## Report 1 -
         # convert csv to xlsx using pandas lib
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t")
+        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
+        #read_file = pd.read_csv(fs_path + "/" + fs_name + fs_ext, sep="\t")
         bar(0.10)
-        read_file.to_excel("" r"" + fd_name, index=None, header=True)
+        #read_file.to_excel("" r"" + fd_name, index=None, header=True)
+        read_file.to_excel(fd_name, index=None, header=True)
         bar(0.20)
         # read xlsx
         # assign the excel file to wb() variable
@@ -479,7 +481,7 @@ def dnr1():
         bar(0.40)
         mr = ws.max_row
         mc = ws.max_column
-        for cell in ws[mr:mc]:
+        for cell in ws["mr:mc"]:
             cell.font = Font(size=11)
         bar(0.60)
         # Set header row style
@@ -541,7 +543,7 @@ def dnr2():
 
         ## Report 1 -
         # convert csv to xlsx using pandas lib
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t")
+        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -555,7 +557,7 @@ def dnr2():
         bar(0.40)
         mr = ws.max_row
         mc = ws.max_column
-        for cell in ws[mr:mc]:
+        for cell in ws["mr:mc"]:
             cell.font = Font(size=11)
         bar(0.60)
         # Set header row style
@@ -617,7 +619,7 @@ def dnr3():
 
         ## Report 1 -
         # convert csv to xlsx using pandas lib
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t")
+        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -631,7 +633,7 @@ def dnr3():
         bar(0.40)
         mr = ws.max_row
         mc = ws.max_column
-        for cell in ws[mr:mc]:
+        for cell in ws["mr:mc"]:
             cell.font = Font(size=11)
         bar(0.60)
         # Set header row style
@@ -693,7 +695,7 @@ def grts_and_gst():
 
         ## Report 1 -
         # convert csv to xlsx using pandas lib
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t")
+        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -707,7 +709,7 @@ def grts_and_gst():
         bar(0.40)
         mr = ws.max_row
         mc = ws.max_column
-        for cell in ws[mr:mc]:
+        for cell in ws["mr:mc"]:
             cell.font = Font(size=11)
         bar(0.60)
         # Set header row style
@@ -769,7 +771,7 @@ def gst_email():
 
         ## Report 1 -
         # convert csv to xlsx using pandas lib
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t")
+        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -783,7 +785,7 @@ def gst_email():
         bar(0.40)
         mr = ws.max_row
         mc = ws.max_column
-        for cell in ws[mr:mc]:
+        for cell in ws["mr:mc"]:
             cell.font = Font(size=11)
         bar(0.60)
         # Set header row style
@@ -872,7 +874,7 @@ def lldb():
         bar(0.40)
         mr = ws.max_row
         mc = ws.max_column
-        for cell in ws[mr:mc]:
+        for cell in ws["mr:mc"]:
             cell.font = Font(size=11)
         bar(0.60)
         # Set header row style
@@ -935,7 +937,7 @@ def pay_and_ref():
 
         ## Report 1 -
         # convert csv to xlsx using pandas lib
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t")
+        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -949,7 +951,7 @@ def pay_and_ref():
         bar(0.40)
         mr = ws.max_row
         mc = ws.max_column
-        for cell in ws[mr:mc]:
+        for cell in ws["mr:mc"]:
             cell.font = Font(size=11)
         bar(0.60)
         # Set header row style
@@ -1010,7 +1012,7 @@ def prop_over():
 
         ## Report 1 -
         # convert csv to xlsx using pandas lib
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t")
+        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -1024,7 +1026,7 @@ def prop_over():
         bar(0.40)
         mr = ws.max_row
         mc = ws.max_column
-        for cell in ws[mr:mc]:
+        for cell in ws["mr:mc"]:
             cell.font = Font(size=11)
         bar(0.60)
         # Set header row style
@@ -1082,7 +1084,7 @@ def room_moves():
     ) as bar:  # default setting
         ## Report 1 -
         # convert csv to xlsx using pandas lib
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t")
+        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -1095,7 +1097,7 @@ def room_moves():
         bar(0.40)
         mr = ws.max_row
         mc = ws.max_column
-        for cell in ws[mr:mc]:
+        for cell in ws["mr:mc"]:
             cell.font = Font(size=11)
         bar(0.60)
         # Set header row style
