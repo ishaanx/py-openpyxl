@@ -18,20 +18,20 @@ import openpyxl.utils
 import openpyxl.workbook
 
 # Input file names without extension
-# Example: "Payments_Aug_4x"
-v_chg_and_adj = "Charges_And_Adjustment_Aug_4x"
-v_payments = "Payments_Aug_4x"
-v_cct = "CCT_Information_Aug_4x"
-v_discp_rates = "Discrepant_Rates_Aug_4x"
-v_dnr1 = "DNR1"
-v_dnr2 = "DNR-2_Aug_4x"
-v_dnr3 = "DNR-3_Aug_4x"
-v_grts_and_gst = "Gratis_And_GstCert_Report_Aug_4x"
-v_gst_email = "Guest_Email_Aug_4x"
-v_lldb = "LLDB_Aug_4x"
-v_pay_and_ref = "Payments_And_Refunds_Aug_4x"
-v_prop_over = "Property_Overview_Aug_4x"
-v_room_moves = "Room_Moves_Aug_4x"
+# Example: "Pa_Aug_4x"
+v_chg_and_adj = 
+v_payments = 
+v_cct = 
+v_discp_rates = 
+v_dnr1 = 
+v_dnr2 = 
+v_dnr3 = 
+v_grts_and_gst = 
+v_gst_email = 
+v_lldb = 
+v_pay_and_ref = 
+v_prop_over = 
+v_room_moves = 
 
 
 def payments():
