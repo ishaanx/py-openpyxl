@@ -230,7 +230,7 @@ def chg_and_adj():
 
         ## Report 1 -
         # convert csv to xlsx using pandas lib
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
+        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep=",",encoding='utf-8')
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
