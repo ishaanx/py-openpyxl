@@ -213,7 +213,8 @@ def chg_and_adj():
     wd = os.getcwd()
     if not os.path.exists(wd_name):
         os.makedirs(wd_name)
-
+    print(wd)
+    print(wd_name)
     # Returns the same day of last month if possible otherwise end of month
     # (eg: March 31st->29th Feb an July 31st->June 30th)
     last_month = datetime.now() - relativedelta(months=1)
@@ -223,7 +224,7 @@ def chg_and_adj():
 
     # print(prev_mon)
     fd_name = "./Export/" + "Charges and Adjustments" + prev_mon + ".xlsx"
-
+    print(fd_name)
     # main prog
     with alive_bar(
         total=100,
@@ -236,7 +237,12 @@ def chg_and_adj():
 
         ## Report 1 -
         # convert csv to xlsx using pandas lib
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep=",",encoding='utf-8')
+
+#colnames=['TIME', 'X', 'Y', 'Z'] 
+#user1 = pd.read_csv('dataset/1.csv', names=colnames, header=None)
+
+        colnames = ["Property Code","Confirmation No","Guest Name","Check in Date","Check in Time","Check out Date","Check out Time"," Room Number","Charge Date","Charge Created at Date","Charge Created at Time","Charge Name","Adjustment Date","Adjustment Created at Date","Adjustment Created at Time","Adjustment Amount","Charge Rate Code Old","Charge Rate Code New","Reason Code","Username","User","Reservation Status","Remarks"]
+        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep=",",encoding='utf-8', header=None,  names=colnames )
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -246,6 +252,8 @@ def chg_and_adj():
         bar(0.30)
         # assign the worksheet of the workbook to a ws() variable
         ws = wb.active
+
+
         bar(0.40)
         mr = ws.max_row
         mc = ws.max_column
@@ -397,7 +405,7 @@ def discp_rates():
 
         ## Report 1 -
         # convert csv to xlsx using pandas lib
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
+        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='utf-8')
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -625,7 +633,7 @@ def dnr3():
 
         ## Report 1 -
         # convert csv to xlsx using pandas lib
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
+        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='utf-8')
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -1090,7 +1098,7 @@ def room_moves():
     ) as bar:  # default setting
         ## Report 1 -
         # convert csv to xlsx using pandas lib
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
+        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='utf-8')
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -1131,9 +1139,9 @@ def clean():
 def all():
     print("Processing all reports")
     clean()
+    chg_and_adj()
     payments()
     cct()
-    chg_and_adj()
     discp_rates()
     dnr1()
     dnr2()
