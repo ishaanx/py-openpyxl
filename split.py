@@ -19,24 +19,30 @@ import openpyxl.workbook
 
 # Input file names without extension
 # Example: "Pa_Aug_4x"
-v_chg_and_adj = 
-v_payments = 
-v_cct = 
-v_discp_rates = 
-v_dnr1 = 
-v_dnr2 = 
-v_dnr3 = 
-v_grts_and_gst = 
-v_gst_email = 
-v_lldb = 
-v_pay_and_ref = 
-v_prop_over = 
-v_room_moves = 
+v_chg_and_adj = "Charges_And_Adjustment_Oct"
+v_payments = "Payments-Oct"
+v_cct = "CCT-Information-Oct"
+v_discp_rates = "Discrepant_Rates_Oct"
+v_dnr1 = "DNR-1-Oct"
+v_dnr2 = "DNR-2-Oct"
+v_dnr3 = "DNR-3-Oct"
+v_grts_and_gst = "Gratis_And_GstCert_Report_Oct"
+v_gst_email = "Guest_Email_Oct"
+v_lldb = "LLDB_Oct"
+v_pay_and_ref = "Payments_And_Refunds_Oct"
+v_prop_over = "Property_Overview_Oct"
+v_room_moves = "Room_Moves_Oct"
 
 
 def payments():
+    ## DECLARE VARIABLES
+    # Source vars
+    fs_path = os.getcwd()
+    fs_name = v_payments
+    fs_ext = ".csv"
+    fs_file_name = fs_path + "/" + fs_name + fs_ext
 
-    filehandler_path = v_payments
+    filehandler_path = fs_file_name
     print(filehandler_path)
     output_path = "./temp"
 
