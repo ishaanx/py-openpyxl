@@ -19,19 +19,19 @@ import openpyxl.workbook
 
 # Input file names without extension
 # Example: "Pa_Aug_4x"
-v_chg_and_adj = "Charges_And_Adjustment_Oct_4x"
-v_payments = "Payments_Oct_4x"
-v_cct = "CCT_Information_Oct_4x"
-v_discp_rates = "Discrepant_Rates_Oct_4x"
-v_dnr1 = "DNR-1_Oct_4x"
-v_dnr2 = "DNR-2_Oct_4x"
-v_dnr3 = "DNR-3_Oct_4x"
-v_grts_and_gst = "Gratis_And_GstCert_Report_Oct_4x"
-v_gst_email = "Guest_Email_Oct_4x"
-v_lldb = "LLDB_Oct_4x"
-v_pay_and_ref = "Payments_And_Refunds_Oct_4x"
-v_prop_over = "Property_Overview_Oct_4x"
-v_room_moves = "Room_Moves_Oct_4x"
+v_chg_and_adj = "Charges_And_Adjustment_Oct"
+v_payments = "Payments-Oct"
+v_cct = "CCT-Information-Oct"
+v_discp_rates = "Discrepant_Rates_Oct"
+v_dnr1 = "DNR-1-Oct"
+v_dnr2 = "DNR-2-Oct"
+v_dnr3 = "DNR-3-Oct"
+v_grts_and_gst = "Gratis_And_GstCert_Report_Oct"
+v_gst_email = "Guest_Email_Oct"
+v_lldb = "LLDB_Oct"
+v_pay_and_ref = "Payments_And_Refunds_Oct"
+v_prop_over = "Property_Overview_Oct"
+v_room_moves = "Room_Moves_Oct"
 
 
 def payments():
@@ -88,7 +88,7 @@ def payments():
             if not os.path.exists("Export"):
                 os.makedirs("Export")
             bar1(0.20)
-            reader = csv.reader(open(filehandler, "r", encoding='cp1252'), delimiter=delimiter)
+            reader = csv.reader(open(filehandler, "r"), delimiter=delimiter)
             current_piece = 1
             current_out_path = os.path.join(
                 output_path, output_name_template % current_piece
@@ -238,7 +238,7 @@ def chg_and_adj():
         ## Report 1 -
         # convert csv to xlsx using pandas lib
         colnames = ["Property Code","Confirmation No","Guest Name","Check in Date","Check in Time","Check out Date","Check out Time"," Room Number","Charge Date","Charge Created at Date","Charge Created at Time","Charge Name","Adjustment Date","Adjustment Created at Date","Adjustment Created at Time","Adjustment Amount","Charge Rate Code Old","Charge Rate Code New","Reason Code","Username","User","Reservation Status","Remarks"]
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t", encoding='cp1252', header=None,  names=colnames )
+        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t", encoding='utf-8', header=None,  names=colnames )
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -401,7 +401,7 @@ def discp_rates():
 
         ## Report 1 -
         # convert csv to xlsx using pandas lib
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
+        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='utf-8')
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -629,7 +629,7 @@ def dnr3():
 
         ## Report 1 -
         # convert csv to xlsx using pandas lib
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
+        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='utf-8')
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -1094,7 +1094,12 @@ def room_moves():
     ) as bar:  # default setting
         ## Report 1 -
         # convert csv to xlsx using pandas lib
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
+
+        ####
+
+# convert csv to xlsx using pandas lib
+        colnames2 = ["Property","Confirmation Number","Guest Name","Checked In Date","Checked In Time", "From Room","To Room", "Move Date","Move Time","Remarks", "User"]
+        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t", header=None,skiprows=1,  names=colnames2)
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
