@@ -237,12 +237,8 @@ def chg_and_adj():
 
         ## Report 1 -
         # convert csv to xlsx using pandas lib
-
-#colnames=['TIME', 'X', 'Y', 'Z'] 
-#user1 = pd.read_csv('dataset/1.csv', names=colnames, header=None)
-
         colnames = ["Property Code","Confirmation No","Guest Name","Check in Date","Check in Time","Check out Date","Check out Time"," Room Number","Charge Date","Charge Created at Date","Charge Created at Time","Charge Name","Adjustment Date","Adjustment Created at Date","Adjustment Created at Time","Adjustment Amount","Charge Rate Code Old","Charge Rate Code New","Reason Code","Username","User","Reservation Status","Remarks"]
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep=",",encoding='utf-8', header=None,  names=colnames )
+        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t", encoding='utf-8', header=None,  names=colnames )
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
