@@ -1135,8 +1135,6 @@ def room_moves():
 
     print("Export Completed\n")
 
-
-
 def os_users():
     import openpyxl
     from openpyxl.reader.excel import load_workbook
@@ -1211,9 +1209,6 @@ def os_users():
 
     print("Export Completed\n")
 
-
-
-
 def os_properties():
     import openpyxl
     from openpyxl.reader.excel import load_workbook
@@ -1287,9 +1282,6 @@ def os_properties():
     print("Export Completed\n")
 
 
-
-
-
 def all_users():
     import openpyxl
     from openpyxl.reader.excel import load_workbook
@@ -1328,7 +1320,7 @@ def all_users():
     ) as bar:  
 
 # convert csv to xlsx using pandas lib
-        colnames2 = ["Property Assigned", "First Name", "Last Name", "Username", "Enterprise Template", "User Template"]
+        colnames2 = ["Property Assigned", "First Name", "Last Name", "Username", "User Status", "Enterprise Template", "User Template"]
         read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t", header=None,skiprows=1,  names=colnames2, encoding='cp1252')
         read_file.fillna("NULL",inplace=True) ##Replaces NaN with "NULL" string
         bar(0.10)
@@ -1361,11 +1353,6 @@ def all_users():
         wb.save(fd_name)
 
     print("Export Completed\n")
-
-
-
-
-
 
 def clean():
     if os.path.exists("Export"):
