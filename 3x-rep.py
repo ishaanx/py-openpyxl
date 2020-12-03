@@ -32,6 +32,10 @@ v_lldb = "LLDB_Oct"
 v_pay_and_ref = "Payments_And_Refunds_Oct"
 v_prop_over = "Property_Overview_Oct"
 v_room_moves = "Room_Moves_Oct"
+v_os_users = "Organization-Structure-Users_Nov"
+v_os_properties = "Organization-Structure-Properties_Nov"
+v_all_users = "All-Users-Data_Nov"
+
 
 
 def payments():
@@ -1132,6 +1136,237 @@ def room_moves():
     print("Export Completed\n")
 
 
+
+def os_users():
+    import openpyxl
+    from openpyxl.reader.excel import load_workbook
+    from openpyxl.styles import Font, Alignment
+    from openpyxl.utils import get_column_letter
+    import numpy as np
+
+    print("Processing Organization Structure Users Report")
+    ## DECLARE VARIABLES
+    # Source vars
+    fs_path = os.getcwd()
+    fs_name = v_os_users
+    fs_ext = ".csv"
+    ##Create working directory
+    wd_name = "Export"
+    wd = os.getcwd()
+    # exp_dir=os.mkdir(wd_name)
+    if not os.path.exists(wd_name):
+        os.makedirs(wd_name)
+    # Returns the same day of last month if possible otherwise end of month
+    # (eg: March 31st->29th Feb an July 31st->June 30th)
+    last_month = datetime.now() - relativedelta(months=1)
+    # Create string of month name and year...
+    text = format(last_month, "%B %Y")
+    prev_mon = "[" + text + "]"
+    # print(prev_mon)
+    fd_name = "./Export/" + "OS Users" + prev_mon + ".xlsx"
+
+    # main prog
+    with alive_bar(
+        total=100,
+        manual=True,
+        title="OS Users",
+        theme="smooth",
+        bar="blocks",
+        spinner="classic",
+    ) as bar:  
+
+# convert csv to xlsx using pandas lib
+        colnames2 = ["Organization Structure", "Parent", "User Template", "Enterprise Template", "First Name", "Last Name", "Username"]
+        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t", header=None,skiprows=1,  names=colnames2)
+        read_file.fillna("NULL",inplace=True) ##Replaces NaN with "NULL" string
+        print(read_file)
+        bar(0.10)
+        read_file.to_excel("" r"" + fd_name, index=None, header=True)
+        bar(0.20)
+        # read xlsx
+        # assign the excel file to wb() variable
+        wb = load_workbook(fd_name)
+        bar(0.30)
+        # assign the worksheet of the workbook to a ws() variable
+        ws = wb.active
+        bar(0.40)
+        mr = ws.max_row
+        mc = ws.max_column
+        for cell in ws["mr:mc"]:
+            cell.font = Font(size=11)
+        bar(0.60)
+        # Set header row style
+        for cell in ws["1:1"]:
+            cell.font = Font(size=12)
+            cell.style = "Accent1"
+            cell.alignment = Alignment(wrapText="True", horizontal="center")
+        bar(0.80)
+        # set column width to 15 with loop
+        for col in range(1, 30):
+            ws.column_dimensions[(get_column_letter(col))].width = 15
+            ws.freeze_panes = "A2"
+        # Save the excel file
+        bar(1)
+        wb.save(fd_name)
+
+    print("Export Completed\n")
+
+
+
+
+def os_properties():
+    import openpyxl
+    from openpyxl.reader.excel import load_workbook
+    from openpyxl.styles import Font, Alignment
+    from openpyxl.utils import get_column_letter
+
+    print("Processing Organization Structure Properties Report")
+    ## DECLARE VARIABLES
+    # Source vars
+    fs_path = os.getcwd()
+    fs_name = v_os_properties
+    fs_ext = ".csv"
+    ##Create working directory
+    wd_name = "Export"
+    wd = os.getcwd()
+    # exp_dir=os.mkdir(wd_name)
+    if not os.path.exists(wd_name):
+        os.makedirs(wd_name)
+    # Returns the same day of last month if possible otherwise end of month
+    # (eg: March 31st->29th Feb an July 31st->June 30th)
+    last_month = datetime.now() - relativedelta(months=1)
+    # Create string of month name and year...
+    text = format(last_month, "%B %Y")
+    prev_mon = "[" + text + "]"
+    # print(prev_mon)
+    fd_name = "./Export/" + "OS Properties" + prev_mon + ".xlsx"
+
+    # main prog
+    with alive_bar(
+        total=100,
+        manual=True,
+        title="OS Properties",
+        theme="smooth",
+        bar="blocks",
+        spinner="classic",
+    ) as bar:  
+
+# convert csv to xlsx using pandas lib
+        colnames2 = ["Organization Structure", "Parent", "User Template", "Enterprise Template", "Property Code"]
+        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t", header=None,skiprows=1,  names=colnames2)
+        read_file.fillna("NULL",inplace=True) ##Replaces NaN with "NULL" string
+        bar(0.10)
+        read_file.to_excel("" r"" + fd_name, index=None, header=True)
+        bar(0.20)
+        # read xlsx
+        # assign the excel file to wb() variable
+        wb = load_workbook(fd_name)
+        bar(0.30)
+        # assign the worksheet of the workbook to a ws() variable
+        ws = wb.active
+        bar(0.40)
+        mr = ws.max_row
+        mc = ws.max_column
+        for cell in ws["mr:mc"]:
+            cell.font = Font(size=11)
+        bar(0.60)
+        # Set header row style
+        for cell in ws["1:1"]:
+            cell.font = Font(size=12)
+            cell.style = "Accent1"
+            cell.alignment = Alignment(wrapText="True", horizontal="center")
+        bar(0.80)
+        # set column width to 15 with loop
+        for col in range(1, 30):
+            ws.column_dimensions[(get_column_letter(col))].width = 15
+            ws.freeze_panes = "A2"
+        # Save the excel file
+        bar(1)
+        wb.save(fd_name)
+
+    print("Export Completed\n")
+
+
+
+
+
+def all_users():
+    import openpyxl
+    from openpyxl.reader.excel import load_workbook
+    from openpyxl.styles import Font, Alignment
+    from openpyxl.utils import get_column_letter
+
+    print("Processing All Users Report")
+    ## DECLARE VARIABLES
+    # Source vars
+    fs_path = os.getcwd()
+    fs_name = v_all_users
+    fs_ext = ".csv"
+    ##Create working directory
+    wd_name = "Export"
+    wd = os.getcwd()
+    # exp_dir=os.mkdir(wd_name)
+    if not os.path.exists(wd_name):
+        os.makedirs(wd_name)
+    # Returns the same day of last month if possible otherwise end of month
+    # (eg: March 31st->29th Feb an July 31st->June 30th)
+    last_month = datetime.now() - relativedelta(months=1)
+    # Create string of month name and year...
+    text = format(last_month, "%B %Y")
+    prev_mon = "[" + text + "]"
+    # print(prev_mon)
+    fd_name = "./Export/" + "All Users" + prev_mon + ".xlsx"
+
+    # main prog
+    with alive_bar(
+        total=100,
+        manual=True,
+        title="All Users",
+        theme="smooth",
+        bar="blocks",
+        spinner="classic",
+    ) as bar:  
+
+# convert csv to xlsx using pandas lib
+        colnames2 = ["Property Assigned", "First Name", "Last Name", "Username", "Enterprise Template", "User Template"]
+        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t", header=None,skiprows=1,  names=colnames2, encoding='cp1252')
+        read_file.fillna("NULL",inplace=True) ##Replaces NaN with "NULL" string
+        bar(0.10)
+        read_file.to_excel("" r"" + fd_name, index=None, header=True)
+        bar(0.20)
+        # read xlsx
+        # assign the excel file to wb() variable
+        wb = load_workbook(fd_name)
+        bar(0.30)
+        # assign the worksheet of the workbook to a ws() variable
+        ws = wb.active
+        bar(0.40)
+        mr = ws.max_row
+        mc = ws.max_column
+        for cell in ws["mr:mc"]:
+            cell.font = Font(size=11)
+        bar(0.60)
+        # Set header row style
+        for cell in ws["1:1"]:
+            cell.font = Font(size=12)
+            cell.style = "Accent1"
+            cell.alignment = Alignment(wrapText="True", horizontal="center")
+        bar(0.80)
+        # set column width to 15 with loop
+        for col in range(1, 30):
+            ws.column_dimensions[(get_column_letter(col))].width = 15
+            ws.freeze_panes = "A2"
+        # Save the excel file
+        bar(1)
+        wb.save(fd_name)
+
+    print("Export Completed\n")
+
+
+
+
+
+
 def clean():
     if os.path.exists("Export"):
         shutil.rmtree("Export")
@@ -1153,6 +1388,9 @@ def all():
     pay_and_ref()
     prop_over()
     room_moves()
+    os_users()
+    os_properties()
+    all_users()
 
 
 dispatcher = {
@@ -1169,6 +1407,9 @@ dispatcher = {
     "11": pay_and_ref,
     "12": prop_over,
     "13": room_moves,
+    "14": os_users,
+    "15": os_properties,
+    "16": all_users,
     "all": all,
 }
 print(
@@ -1186,6 +1427,9 @@ print(
     11 - Payments and Refunds\n\
     12 - Prop overview\n\
     13 - Room Moves\n\
+    14 - OS Users\n\
+    15 - OS Properties\n\
+    16 - All Users\n\
     "
 )
 
