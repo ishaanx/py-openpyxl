@@ -19,19 +19,23 @@ import openpyxl.workbook
 
 # Input file names without extension
 # Example: "Pa_Aug_4x"
-v_chg_and_adj = "Charges_And_Adjustment_Oct"
-v_payments = "Payments-Oct"
-v_cct = "CCT-Information-Oct"
-v_discp_rates = "Discrepant_Rates_Oct"
-v_dnr1 = "DNR-1-Oct"
-v_dnr2 = "DNR-2-Oct"
-v_dnr3 = "DNR-3-Oct"
-v_grts_and_gst = "Gratis_And_GstCert_Report_Oct"
-v_gst_email = "Guest_Email_Oct"
-v_lldb = "LLDB_Oct"
-v_pay_and_ref = "Payments_And_Refunds_Oct"
-v_prop_over = "Property_Overview_Oct"
-v_room_moves = "Room_Moves_Oct"
+v_chg_and_adj = "Charges_And_Adjustment_Nov_4x"
+v_payments = "Payments_Nov_4x"
+v_cct = "CCT_Information_Nov_4x"
+v_discp_rates = "Discrepant_Rates_Nov_4x"
+v_dnr1 = "DNR-1_Nov_4x"
+v_dnr2 = "DNR-2_Nov_4x"
+v_dnr3 = "DNR-3_Nov_4x"
+v_grts_and_gst = "Gratis_And_GstCert_Report_Nov_4x"
+v_gst_email = "Guest_Email_Nov_4x"
+v_lldb = "LLDB_Nov_4x"
+v_pay_and_ref = "Payments_And_Refunds_Nov_4x"
+v_prop_over = "Property_Overview_Nov_4x"
+v_room_moves = "Room_Moves_Nov_4x"
+v_os_users = "Organization-Structure-Users_Nov"
+v_os_properties = "Organization-Structure-Properties_Nov"
+v_all_users = "All-Users-Data_Nov"
+v_api = "4x"
 
 
 def payments():
@@ -39,7 +43,7 @@ def payments():
     # Source vars
     fs_path = os.getcwd()
     fs_name = v_payments
-    fs_ext = ".csv"
+    fs_ext = ".tsv"
     fs_file_name = fs_path + "/" + fs_name + fs_ext
 
     filehandler_path = fs_file_name
@@ -59,9 +63,9 @@ def payments():
 
     def split(
         filehandler=filehandler_path,
-        delimiter=",",
+        delimiter="\t",
         row_limit=300000,
-        output_name_template="Payments_%s.csv",
+        output_name_template="Payments_%s.tsv",
         keep_headers=True,
     ):
         """
@@ -88,7 +92,8 @@ def payments():
             if not os.path.exists("Export"):
                 os.makedirs("Export")
             bar1(0.20)
-            reader = csv.reader(open(filehandler, "r"), delimiter=delimiter)
+            reader = csv.reader(open(filehandler, "r", encoding='cp1252'), delimiter=delimiter)
+
             current_piece = 1
             current_out_path = os.path.join(
                 output_path, output_name_template % current_piece
@@ -133,7 +138,7 @@ def payments():
         # Create string of month name and year...
         text = format(last_month, "%B %Y")
         prev_mon = "[" + text + "]"
-        fname = "./Export/" + "Payments" + prev_mon + ".xlsx"
+        fname = "./Export/" + "Payments" + prev_mon + v_api + ".xlsx"
         writer = pd.ExcelWriter(fname, engine="xlsxwriter")
         folders = "temp"
         print("\n")
@@ -141,13 +146,14 @@ def payments():
             title="Combining csv", theme="smooth", bar="blocks", spinner="classic"
         ) as bar2:
             myPath = os.path.join(os.getcwd(), folders)
-            for myPath in Path(myPath).rglob("*.csv"):
+            for myPath in Path(myPath).rglob("*.tsv"):
                 df = pd.read_csv(myPath, sep="\t", low_memory=False)
                 bar2()
                 df.to_excel(
                     writer, index=False, sheet_name=os.path.basename(myPath)[:31]
                 )
             writer.save()
+        print("\n")
         return fname
 
     def styl():
@@ -162,7 +168,7 @@ def payments():
         # Create string of month name and year...
         text = format(last_month, "%B %Y")
         prev_mon = "[" + text + "]"
-        fname = "./Export/" + "Payments" + prev_mon + ".xlsx"
+        fname = "./Export/" + "Payments" + prev_mon + v_api + ".xlsx"
         wb = load_workbook(fname)
         for ws in wb.worksheets:
             mr = ws.max_row
@@ -223,7 +229,7 @@ def chg_and_adj():
     prev_mon = "[" + text + "]"
 
     # print(prev_mon)
-    fd_name = "./Export/" + "Charges and Adjustments" + prev_mon + ".xlsx"
+    fd_name = "./Export/" + "Charges and Adjustments" + prev_mon + v_api + ".xlsx"
     print(fd_name)
     # main prog
     with alive_bar(
@@ -238,7 +244,7 @@ def chg_and_adj():
         ## Report 1 -
         # convert csv to xlsx using pandas lib
         colnames = ["Property Code","Confirmation No","Guest Name","Check in Date","Check in Time","Check out Date","Check out Time"," Room Number","Charge Date","Charge Created at Date","Charge Created at Time","Charge Name","Adjustment Date","Adjustment Created at Date","Adjustment Created at Time","Adjustment Amount","Charge Rate Code Old","Charge Rate Code New","Reason Code","Username","User","Reservation Status","Remarks"]
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t", encoding='utf-8', header=None,  names=colnames )
+        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",  header=None,  names=colnames, encoding='cp1252', skiprows=1 )
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -302,7 +308,7 @@ def cct():
     prev_mon = "[" + text + "]"
 
     # print(prev_mon)
-    fd_name = "./Export/" + "CCT Information" + prev_mon + ".xlsx"
+    fd_name = "./Export/" + "CCT Information" + prev_mon + v_api + ".xlsx"
 
     # main prog
     with alive_bar(
@@ -387,7 +393,7 @@ def discp_rates():
     prev_mon = "[" + text + "]"
 
     # print(prev_mon)
-    fd_name = "./Export/" + "Discrepant Rates" + prev_mon + ".xlsx"
+    fd_name = "./Export/" + "Discrepant Rates" + prev_mon + v_api + ".xlsx"
 
     # main prog
     with alive_bar(
@@ -401,7 +407,7 @@ def discp_rates():
 
         ## Report 1 -
         # convert csv to xlsx using pandas lib
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='utf-8')
+        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -462,7 +468,7 @@ def dnr1():
     text = format(last_month, "%B %Y")
     prev_mon = "[" + text + "]"
 
-    fd_name = "./Export/" + "DNR 1" + prev_mon + ".xlsx"
+    fd_name = "./Export/" + "DNR 1" + prev_mon + v_api + ".xlsx"
     # main prog
     with alive_bar(
         total=100,
@@ -539,7 +545,7 @@ def dnr2():
     prev_mon = "[" + text + "]"
 
     # print(prev_mon)
-    fd_name = "./Export/" + "DNR 2" + prev_mon + ".xlsx"
+    fd_name = "./Export/" + "DNR 2" + prev_mon + v_api + ".xlsx"
 
     # main prog
     with alive_bar(
@@ -616,7 +622,7 @@ def dnr3():
     prev_mon = "[" + text + "]"
 
     # print(prev_mon)
-    fd_name = "./Export/" + "DNR 3" + prev_mon + ".xlsx"
+    fd_name = "./Export/" + "DNR 3" + prev_mon + v_api + ".xlsx"
     # main prog
     with alive_bar(
         total=100,
@@ -629,7 +635,7 @@ def dnr3():
 
         ## Report 1 -
         # convert csv to xlsx using pandas lib
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='utf-8')
+        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -691,7 +697,7 @@ def grts_and_gst():
     prev_mon = "[" + text + "]"
 
     # print(prev_mon)
-    fd_name = "./Export/" + "GRATIS and GSTCERT" + prev_mon + ".xlsx"
+    fd_name = "./Export/" + "GRATIS and GSTCERT" + prev_mon + v_api + ".xlsx"
 
     # main prog
     with alive_bar(
@@ -767,7 +773,7 @@ def gst_email():
     text = format(last_month, "%B %Y")
     prev_mon = "[" + text + "]"
     # print(prev_mon)
-    fd_name = "./Export/" + "Guest Email" + prev_mon + ".xlsx"
+    fd_name = "./Export/" + "Guest Email" + prev_mon + v_api + ".xlsx"
 
     # main prog
     with alive_bar(
@@ -843,7 +849,7 @@ def lldb():
     text = format(last_month, "%B %Y")
     prev_mon = "[" + text + "]"
     # print(prev_mon)
-    fd_name = "./Export/" + "LLDB" + prev_mon + ".xlsx"
+    fd_name = "./Export/" + "LLDB" + prev_mon + v_api + ".xlsx"
 
     # main prog
     with alive_bar(
@@ -933,7 +939,7 @@ def pay_and_ref():
     text = format(last_month, "%B %Y")
     prev_mon = "[" + text + "]"
     # print(prev_mon)
-    fd_name = "./Export/" + "Payments and Refunds" + prev_mon + ".xlsx"
+    fd_name = "./Export/" + "Payments and Refunds" + prev_mon + v_api + ".xlsx"
 
     # main prog
     with alive_bar(
@@ -1009,7 +1015,7 @@ def prop_over():
     text = format(last_month, "%B %Y")
     prev_mon = "[" + text + "]"
     # print(prev_mon)
-    fd_name = "./Export/" + "Property Overview" + prev_mon + ".xlsx"
+    fd_name = "./Export/" + "Property Overview" + prev_mon + v_api + ".xlsx"
     # main prog
     with alive_bar(
         total=100,
@@ -1081,7 +1087,7 @@ def room_moves():
     text = format(last_month, "%B %Y")
     prev_mon = "[" + text + "]"
     # print(prev_mon)
-    fd_name = "./Export/" + "Room Moves" + prev_mon + ".xlsx"
+    fd_name = "./Export/" + "Room Moves" + prev_mon + v_api + ".xlsx"
 
     # main prog
     with alive_bar(
@@ -1097,9 +1103,9 @@ def room_moves():
 
         ####
 
-# convert csv to xlsx using pandas lib
+        # convert csv to xlsx using pandas lib
         colnames2 = ["Property","Confirmation Number","Guest Name","Checked In Date","Checked In Time", "From Room","To Room", "Move Date","Move Time","Remarks", "User"]
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t", header=None,skiprows=1,  names=colnames2)
+        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t", header=None,skiprows=1,  names=colnames2, encoding='cp1252')
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -1132,17 +1138,239 @@ def room_moves():
     print("Export Completed\n")
 
 
+def os_users():
+    import openpyxl
+    from openpyxl.reader.excel import load_workbook
+    from openpyxl.styles import Font, Alignment
+    from openpyxl.utils import get_column_letter
+    import numpy as np
+
+    print("Processing Organization Structure Users Report")
+    ## DECLARE VARIABLES
+    # Source vars
+    fs_path = os.getcwd()
+    fs_name = v_os_users
+    fs_ext = ".csv"
+    ##Create working directory
+    wd_name = "Export"
+    wd = os.getcwd()
+    # exp_dir=os.mkdir(wd_name)
+    if not os.path.exists(wd_name):
+        os.makedirs(wd_name)
+    # Returns the same day of last month if possible otherwise end of month
+    # (eg: March 31st->29th Feb an July 31st->June 30th)
+    last_month = datetime.now() - relativedelta(months=1)
+    # Create string of month name and year...
+    text = format(last_month, "%B %Y")
+    prev_mon = "[" + text + "]"
+    # print(prev_mon)
+    fd_name = "./Export/" + "OS Users" + prev_mon + v_api + ".xlsx"
+
+    # main prog
+    with alive_bar(
+        total=100,
+        manual=True,
+        title="OS Users",
+        theme="smooth",
+        bar="blocks",
+        spinner="classic",
+    ) as bar:  
+
+        # convert csv to xlsx using pandas lib
+        colnames2 = ["Organization Structure", "Parent", "User Template", "Enterprise Template", "First Name", "Last Name", "Username"]
+        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t", header=None,skiprows=1,  names=colnames2)
+        read_file.fillna("NULL",inplace=True) ##Replaces NaN with "NULL" string
+        # print(read_file)
+        bar(0.10)
+        read_file.to_excel("" r"" + fd_name, index=None, header=True)
+        bar(0.20)
+        # read xlsx
+        # assign the excel file to wb() variable
+        wb = load_workbook(fd_name)
+        bar(0.30)
+        # assign the worksheet of the workbook to a ws() variable
+        ws = wb.active
+        bar(0.40)
+        mr = ws.max_row
+        mc = ws.max_column
+        for cell in ws["mr:mc"]:
+            cell.font = Font(size=11)
+        bar(0.60)
+        # Set header row style
+        for cell in ws["1:1"]:
+            cell.font = Font(size=12)
+            cell.style = "Accent1"
+            cell.alignment = Alignment(wrapText="True", horizontal="center")
+        bar(0.80)
+        # set column width to 15 with loop
+        for col in range(1, 30):
+            ws.column_dimensions[(get_column_letter(col))].width = 15
+            ws.freeze_panes = "A2"
+        # Save the excel file
+        bar(1)
+        wb.save(fd_name)
+
+    print("Export Completed\n")
+
+
+def os_properties():
+    import openpyxl
+    from openpyxl.reader.excel import load_workbook
+    from openpyxl.styles import Font, Alignment
+    from openpyxl.utils import get_column_letter
+
+    print("Processing Organization Structure Properties Report")
+    ## DECLARE VARIABLES
+    # Source vars
+    fs_path = os.getcwd()
+    fs_name = v_os_properties
+    fs_ext = ".csv"
+    ##Create working directory
+    wd_name = "Export"
+    wd = os.getcwd()
+    # exp_dir=os.mkdir(wd_name)
+    if not os.path.exists(wd_name):
+        os.makedirs(wd_name)
+    # Returns the same day of last month if possible otherwise end of month
+    # (eg: March 31st->29th Feb an July 31st->June 30th)
+    last_month = datetime.now() - relativedelta(months=1)
+    # Create string of month name and year...
+    text = format(last_month, "%B %Y")
+    prev_mon = "[" + text + "]"
+    # print(prev_mon)
+    fd_name = "./Export/" + "OS Properties" + prev_mon + v_api + ".xlsx"
+
+    # main prog
+    with alive_bar(
+        total=100,
+        manual=True,
+        title="OS Properties",
+        theme="smooth",
+        bar="blocks",
+        spinner="classic",
+    ) as bar:  
+
+        # convert csv to xlsx using pandas lib
+        colnames2 = ["Organization Structure", "Parent", "User Template", "Enterprise Template", "Property Code"]
+        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t", header=None,skiprows=1,  names=colnames2)
+        read_file.fillna("NULL",inplace=True) ##Replaces NaN with "NULL" string
+        bar(0.10)
+        read_file.to_excel("" r"" + fd_name, index=None, header=True)
+        bar(0.20)
+        # read xlsx
+        # assign the excel file to wb() variable
+        wb = load_workbook(fd_name)
+        bar(0.30)
+        # assign the worksheet of the workbook to a ws() variable
+        ws = wb.active
+        bar(0.40)
+        mr = ws.max_row
+        mc = ws.max_column
+        for cell in ws["mr:mc"]:
+            cell.font = Font(size=11)
+        bar(0.60)
+        # Set header row style
+        for cell in ws["1:1"]:
+            cell.font = Font(size=12)
+            cell.style = "Accent1"
+            cell.alignment = Alignment(wrapText="True", horizontal="center")
+        bar(0.80)
+        # set column width to 15 with loop
+        for col in range(1, 30):
+            ws.column_dimensions[(get_column_letter(col))].width = 15
+            ws.freeze_panes = "A2"
+        # Save the excel file
+        bar(1)
+        wb.save(fd_name)
+
+    print("Export Completed\n")
+
+
+def all_users():
+    import openpyxl
+    from openpyxl.reader.excel import load_workbook
+    from openpyxl.styles import Font, Alignment
+    from openpyxl.utils import get_column_letter
+
+    print("Processing All Users Report")
+    ## DECLARE VARIABLES
+    # Source vars
+    fs_path = os.getcwd()
+    fs_name = v_all_users
+    fs_ext = ".csv"
+    ##Create working directory
+    wd_name = "Export"
+    wd = os.getcwd()
+    # exp_dir=os.mkdir(wd_name)
+    if not os.path.exists(wd_name):
+        os.makedirs(wd_name)
+    # Returns the same day of last month if possible otherwise end of month
+    # (eg: March 31st->29th Feb an July 31st->June 30th)
+    last_month = datetime.now() - relativedelta(months=1)
+    # Create string of month name and year...
+    text = format(last_month, "%B %Y")
+    prev_mon = "[" + text + "]"
+    # print(prev_mon)
+    fd_name = "./Export/" + "All Users" + prev_mon + v_api + ".xlsx"
+
+    # main prog
+    with alive_bar(
+        total=100,
+        manual=True,
+        title="All Users",
+        theme="smooth",
+        bar="blocks",
+        spinner="classic",
+    ) as bar:  
+
+        # convert csv to xlsx using pandas lib
+        colnames2 = ["Property Assigned", "First Name", "Last Name", "Username", "User Status", "Enterprise Template", "User Template"]
+        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t", header=None,skiprows=1,  names=colnames2, encoding='cp1252',low_memory=False)
+        read_file.fillna("NULL",inplace=True) ##Replaces NaN with "NULL" string
+        bar(0.10)
+        read_file.to_excel("" r"" + fd_name, index=None, header=True)
+        bar(0.20)
+        # read xlsx
+        # assign the excel file to wb() variable
+        wb = load_workbook(fd_name)
+        bar(0.30)
+        # assign the worksheet of the workbook to a ws() variable
+        ws = wb.active
+        bar(0.40)
+        mr = ws.max_row
+        mc = ws.max_column
+        for cell in ws["mr:mc"]:
+            cell.font = Font(size=11)
+        bar(0.60)
+        # Set header row style
+        for cell in ws["1:1"]:
+            cell.font = Font(size=12)
+            cell.style = "Accent1"
+            cell.alignment = Alignment(wrapText="True", horizontal="center")
+        bar(0.80)
+        # set column width to 15 with loop
+        for col in range(1, 30):
+            ws.column_dimensions[(get_column_letter(col))].width = 15
+            ws.freeze_panes = "A2"
+        # Save the excel file
+        bar(1)
+        wb.save(fd_name)
+
+    print("Export Completed\n")
+
+
+## Cleanup Function to remove export folder
 def clean():
     if os.path.exists("Export"):
         shutil.rmtree("Export")
 
-
+## If user input = all then execute all functions listed below
 def all():
     print("Processing all reports")
     clean()
-    chg_and_adj()
     payments()
     cct()
+    chg_and_adj()
     discp_rates()
     dnr1()
     dnr2()
@@ -1153,8 +1381,11 @@ def all():
     pay_and_ref()
     prop_over()
     room_moves()
+    os_users()
+    os_properties()
+    all_users()
 
-
+## Dispatcher function used to select user choice
 dispatcher = {
     "1": payments,
     "2": cct,
@@ -1169,6 +1400,9 @@ dispatcher = {
     "11": pay_and_ref,
     "12": prop_over,
     "13": room_moves,
+    "14": os_users,
+    "15": os_properties,
+    "16": all_users,
     "all": all,
 }
 print(
@@ -1186,6 +1420,9 @@ print(
     11 - Payments and Refunds\n\
     12 - Prop overview\n\
     13 - Room Moves\n\
+    14 - OS Users\n\
+    15 - OS Properties\n\
+    16 - All Users\n\
     "
 )
 
