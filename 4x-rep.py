@@ -45,10 +45,13 @@ def payments():
     fs_name = v_payments
     fs_ext = ".tsv"
     fs_file_name = fs_path + "/" + fs_name + fs_ext
+    fs_ext_csv=".csv"
+    fs_file_name_csv = fs_path + "/" + fs_name + fs_ext_csv
 
     filehandler_path = fs_file_name
     print(filehandler_path)
     output_path = "./temp"
+    os.rename(fs_file_name_csv, fs_file_name)
 
     def cleanup():
         with alive_bar(
