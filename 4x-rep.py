@@ -176,24 +176,24 @@ def payments():
         for ws in wb.worksheets:
             mr = ws.max_row
             mc = ws.max_column
-        with alive_bar(
-            title="Applying Font Styles",
-            theme="smooth",
-            bar="blocks",
-            spinner="classic",
-        ) as bar3:
-            for cell in ws["mr:mc"]:
-                cell.font = Font(size=11)
-                bar3()
-            for cell in ws["1:1"]:
-                cell.font = Font(size=12)
-                cell.style = "Accent1"
-                cell.alignment = Alignment(wrapText="True", horizontal="center")
-                # bar4()
-            for col in range(1, 30):
-                ws.column_dimensions[(get_column_letter(col))].width = 15
-                ws.freeze_panes = "A2"
-                # bar5()
+            with alive_bar(
+                title="Applying Font Styles",
+                theme="smooth",
+                bar="blocks",
+                spinner="classic",
+            ) as bar3:
+                for cell in ws["mr:mc"]:
+                    cell.font = Font(size=11)
+                    bar3()
+                for cell in ws["1:1"]:
+                    cell.font = Font(size=12)
+                    cell.style = "Accent1"
+                    cell.alignment = Alignment(wrapText="True", horizontal="center")
+                    # bar4()
+                for col in range(1, 30):
+                    ws.column_dimensions[(get_column_letter(col))].width = 15
+                    ws.freeze_panes = "A2"
+                    # bar5()
         print("\n")
         wb.save(fname)
 
