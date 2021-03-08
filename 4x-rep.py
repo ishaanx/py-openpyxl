@@ -925,12 +925,20 @@ def lldb():
             header=0,
             names=[
                 "Property Code",
+                "Property Name",
+                "Property Type",
+                "Property Brand",
+                "State",
+                "Company Name",
+                "Company Code",
                 "Confirmation Number",
                 "Checkin Date",
                 "Checkout Date",
-                "Company Name",
+                "Number of Nights",
                 "Total Charges",
                 "External Confirmation No",
+                "Booking Source",
+                "Rate Code",
             ],
         )
         bar(0.10)
