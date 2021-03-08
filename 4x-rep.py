@@ -17,26 +17,25 @@ import openpyxl.styles
 import openpyxl.utils
 import openpyxl.workbook
 
-# Input file names without extension
+# Input file names without file extension
 # Example: "Pa_Aug_4x"
-v_chg_and_adj = "Charges_And_Adjustment_Nov_4x"
-v_payments = "Payments_Nov_4x"
-v_cct = "CCT_Information_Nov_4x"
-v_discp_rates = "Discrepant_Rates_Nov_4x"
-v_dnr1 = "DNR-1_Nov_4x"
-v_dnr2 = "DNR-2_Nov_4x"
-v_dnr3 = "DNR-3_Nov_4x"
-v_grts_and_gst = "Gratis_And_GstCert_Report_Nov_4x"
-v_gst_email = "Guest_Email_Nov_4x"
-v_lldb = "LLDB_Nov_4x"
-v_pay_and_ref = "Payments_And_Refunds_Nov_4x"
-v_prop_over = "Property_Overview_Nov_4x"
-v_room_moves = "Room_Moves_Nov_4x"
-v_os_users = "Organization-Structure-Users_Nov"
-v_os_properties = "Organization-Structure-Properties_Nov"
-v_all_users = "All-Users-Data_Nov"
+v_chg_and_adj = "Charges_And_Adjustment_Feb_4x"
+v_payments = "Payments_Feb_4x"
+v_cct = "CCT_Information_Feb_4x"
+v_discp_rates = "Discrepant_Rates_Feb_4x"
+v_dnr1 = "DNR-1_Feb_4x"
+v_dnr2 = "DNR-2_Feb_4x"
+v_dnr3 = "DNR-3_Feb_4x"
+v_grts_and_gst = "Gratis_And_GstCert_Report_Feb_4x"
+v_gst_email = "Guest_Email_Feb_4x"
+v_lldb = "LLDB_Feb_4x"
+v_pay_and_ref = "Payments_And_Refunds_Feb_4x"
+v_prop_over = "Property_Overview_Feb_4x"
+v_room_moves = "Room_Moves_Feb_4x"
+v_os_users = "Organization-Structure-Users_Feb"
+v_os_properties = "Organization-Structure-Properties_Feb"
+v_all_users = "All-Users-Data_Feb"
 v_api = "4x"
-
 
 def payments():
     ## DECLARE VARIABLES
@@ -45,13 +44,10 @@ def payments():
     fs_name = v_payments
     fs_ext = ".tsv"
     fs_file_name = fs_path + "/" + fs_name + fs_ext
-    fs_ext_csv=".csv"
-    fs_file_name_csv = fs_path + "/" + fs_name + fs_ext_csv
 
     filehandler_path = fs_file_name
     print(filehandler_path)
     output_path = "./temp"
-    os.rename(fs_file_name_csv, fs_file_name)
 
     def cleanup():
         with alive_bar(
@@ -95,8 +91,12 @@ def payments():
             if not os.path.exists("Export"):
                 os.makedirs("Export")
             bar1(0.20)
-            reader = csv.reader(open(filehandler, "r", encoding='cp1252'), delimiter=delimiter)
-
+            try:
+                reader = csv.reader(open(filehandler, "r", encoding='utf-8'), delimiter=delimiter)
+            except ValueError:
+                reader = csv.reader(open(filehandler, "r", encoding='cp1252'), delimiter=delimiter)
+            else:
+                reader = csv.reader(open(filehandler, "r", encoding='latin1'), delimiter=delimiter)                
             current_piece = 1
             current_out_path = os.path.join(
                 output_path, output_name_template % current_piece
@@ -215,15 +215,15 @@ def chg_and_adj():
     # Source vars
     fs_path = os.getcwd()
     fs_name = v_chg_and_adj
-    fs_ext = ".csv"
+    fs_ext = ".tsv"
 
     ##Create working directory
     wd_name = "Export"
     wd = os.getcwd()
     if not os.path.exists(wd_name):
         os.makedirs(wd_name)
-    print(wd)
-    print(wd_name)
+    #print(wd)
+    #print(wd_name)
     # Returns the same day of last month if possible otherwise end of month
     # (eg: March 31st->29th Feb an July 31st->June 30th)
     last_month = datetime.now() - relativedelta(months=1)
@@ -233,7 +233,7 @@ def chg_and_adj():
 
     # print(prev_mon)
     fd_name = "./Export/" + "Charges and Adjustments" + prev_mon + v_api + ".xlsx"
-    print(fd_name)
+    #print(fd_name)
     # main prog
     with alive_bar(
         total=100,
@@ -247,7 +247,10 @@ def chg_and_adj():
         ## Report 1 -
         # convert csv to xlsx using pandas lib
         colnames = ["Property Code","Confirmation No","Guest Name","Check in Date","Check in Time","Check out Date","Check out Time"," Room Number","Charge Date","Charge Created at Date","Charge Created at Time","Charge Name","Adjustment Date","Adjustment Created at Date","Adjustment Created at Time","Adjustment Amount","Charge Rate Code Old","Charge Rate Code New","Reason Code","Username","User","Reservation Status","Remarks"]
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",  header=None,  names=colnames, encoding='cp1252', skiprows=1 )
+        try:
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",  header=None,  names=colnames, encoding='utf-8', skiprows=1 )
+        except ValueError:
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",  header=None,  names=colnames, encoding='cp1252', skiprows=1 )
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -294,7 +297,7 @@ def cct():
     # Source vars
     fs_path = os.getcwd()
     fs_name = v_cct
-    fs_ext = ".csv"
+    fs_ext = ".tsv"
 
     ##Create working directory
     wd_name = "Export"
@@ -325,7 +328,10 @@ def cct():
 
         ## Report 1 -
         # convert csv to xlsx using pandas lib
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
+        try:
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='utf-8')
+        except ValueError:
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -379,7 +385,7 @@ def discp_rates():
     # Source vars
     fs_path = os.getcwd()
     fs_name = v_discp_rates
-    fs_ext = ".csv"
+    fs_ext = ".tsv"
 
     ##Create working directory
     wd_name = "Export"
@@ -410,7 +416,10 @@ def discp_rates():
 
         ## Report 1 -
         # convert csv to xlsx using pandas lib
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
+        try:
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='utf-8')
+        except ValueError:
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -455,7 +464,7 @@ def dnr1():
     # Source vars
     fs_path = os.getcwd()
     fs_name = v_dnr1
-    fs_ext = ".csv"
+    fs_ext = ".tsv"
 
     ##Create working directory
     wd_name = "Export"
@@ -484,8 +493,10 @@ def dnr1():
 
         ## Report 1 -
         # convert csv to xlsx using pandas lib
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
-        #read_file = pd.read_csv(fs_path + "/" + fs_name + fs_ext, sep="\t")
+        try:
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='utf-8')
+        except ValueError:
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
         bar(0.10)
         #read_file.to_excel("" r"" + fd_name, index=None, header=True)
         read_file.to_excel(fd_name, index=None, header=True)
@@ -531,7 +542,7 @@ def dnr2():
     # Source vars
     fs_path = os.getcwd()
     fs_name = v_dnr2
-    fs_ext = ".csv"
+    fs_ext = ".tsv"
 
     ##Create working directory
     wd_name = "Export"
@@ -562,7 +573,10 @@ def dnr2():
 
         ## Report 1 -
         # convert csv to xlsx using pandas lib
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
+        try:
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='utf-8')
+        except ValueError:
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -608,7 +622,7 @@ def dnr3():
     # Source vars
     fs_path = os.getcwd()
     fs_name = v_dnr3
-    fs_ext = ".csv"
+    fs_ext = ".tsv"
 
     ##Create working directory
     wd_name = "Export"
@@ -638,7 +652,10 @@ def dnr3():
 
         ## Report 1 -
         # convert csv to xlsx using pandas lib
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
+        try:
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='utf-8')
+        except ValueError:
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -683,7 +700,7 @@ def grts_and_gst():
     # Source vars
     fs_path = os.getcwd()
     fs_name = v_grts_and_gst
-    fs_ext = ".csv"
+    fs_ext = ".tsv"
 
     ##Create working directory
     wd_name = "Export"
@@ -714,7 +731,40 @@ def grts_and_gst():
 
         ## Report 1 -
         # convert csv to xlsx using pandas lib
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
+        try:
+            read_file = pd.read_csv(
+                ""r"" + fs_path + "/" + fs_name + fs_ext,
+                sep="\t",
+                header=0,
+                encoding='utf-8',
+                names=[
+                    "Property Code",
+                    "Confirmation Number",
+                    "Checkin Date",
+                    "Checkout Date",
+                    "Number of Nights",
+                    "Payment Tpe",
+                    "Guest Name",
+                    "Number of Payments",
+                ],
+            )
+        except ValueError:
+            read_file = pd.read_csv(
+                ""r"" + fs_path + "/" + fs_name + fs_ext,
+                sep="\t",
+                header=0,
+                encoding='cp1252',
+                names=[
+                    "Property Code",
+                    "Confirmation Number",
+                    "Checkin Date",
+                    "Checkout Date",
+                    "Number of Nights",
+                    "Payment Tpe",
+                    "Guest Name",
+                    "Number of Payments",
+                ],
+            )                        
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -760,7 +810,7 @@ def gst_email():
     # Source vars
     fs_path = os.getcwd()
     fs_name = v_gst_email
-    fs_ext = ".csv"
+    fs_ext = ".tsv"
 
     ##Create working directory
     wd_name = "Export"
@@ -790,7 +840,10 @@ def gst_email():
 
         ## Report 1 -
         # convert csv to xlsx using pandas lib
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
+        try:
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='utf-8')
+        except ValueError:
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -836,7 +889,7 @@ def lldb():
     # Source vars
     fs_path = os.getcwd()
     fs_name = v_lldb
-    fs_ext = ".csv"
+    fs_ext = ".tsv"
 
     ##Create working directory
     wd_name = "Export"
@@ -925,7 +978,7 @@ def pay_and_ref():
     # Source vars
     fs_path = os.getcwd()
     fs_name = v_pay_and_ref
-    fs_ext = ".csv"
+    fs_ext = ".tsv"
 
     ##Create working directory
     wd_name = "Export"
@@ -956,7 +1009,10 @@ def pay_and_ref():
 
         ## Report 1 -
         # convert csv to xlsx using pandas lib
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
+        try:
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='utf-8')
+        except ValueError:
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -1002,7 +1058,7 @@ def prop_over():
     # Source vars
     fs_path = os.getcwd()
     fs_name = v_prop_over
-    fs_ext = ".csv"
+    fs_ext = ".tsv"
 
     ##Create working directory
     wd_name = "Export"
@@ -1031,7 +1087,10 @@ def prop_over():
 
         ## Report 1 -
         # convert csv to xlsx using pandas lib
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
+        try:
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='utf-8')
+        except ValueError:
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -1076,7 +1135,7 @@ def room_moves():
     # Source vars
     fs_path = os.getcwd()
     fs_name = v_room_moves
-    fs_ext = ".csv"
+    fs_ext = ".tsv"
     ##Create working directory
     wd_name = "Export"
     wd = os.getcwd()
@@ -1108,7 +1167,10 @@ def room_moves():
 
         # convert csv to xlsx using pandas lib
         colnames2 = ["Property","Confirmation Number","Guest Name","Checked In Date","Checked In Time", "From Room","To Room", "Move Date","Move Time","Remarks", "User"]
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t", header=None,skiprows=1,  names=colnames2, encoding='cp1252')
+        try:
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t", header=None,skiprows=1,  names=colnames2, encoding='utf-8')
+        except ValueError:
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t", header=None,skiprows=1,  names=colnames2, encoding='cp1252')
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -1153,7 +1215,7 @@ def os_users():
     # Source vars
     fs_path = os.getcwd()
     fs_name = v_os_users
-    fs_ext = ".csv"
+    fs_ext = ".tsv"
     ##Create working directory
     wd_name = "Export"
     wd = os.getcwd()
@@ -1227,7 +1289,7 @@ def os_properties():
     # Source vars
     fs_path = os.getcwd()
     fs_name = v_os_properties
-    fs_ext = ".csv"
+    fs_ext = ".tsv"
     ##Create working directory
     wd_name = "Export"
     wd = os.getcwd()
@@ -1300,7 +1362,7 @@ def all_users():
     # Source vars
     fs_path = os.getcwd()
     fs_name = v_all_users
-    fs_ext = ".csv"
+    fs_ext = ".tsv"
     ##Create working directory
     wd_name = "Export"
     wd = os.getcwd()
@@ -1328,7 +1390,10 @@ def all_users():
 
         # convert csv to xlsx using pandas lib
         colnames2 = ["Property Assigned", "First Name", "Last Name", "Username", "User Status", "Enterprise Template", "User Template"]
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t", header=None,skiprows=1,  names=colnames2, encoding='cp1252',low_memory=False)
+        try:
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t", header=None,skiprows=1,  names=colnames2, encoding='utf-8',low_memory=False)
+        except ValueError:
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t", header=None,skiprows=1,  names=colnames2, encoding='cp1252',low_memory=False)
         read_file.fillna("NULL",inplace=True) ##Replaces NaN with "NULL" string
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
