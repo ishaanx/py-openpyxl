@@ -1388,7 +1388,10 @@ def all_users():
 
         # convert csv to xlsx using pandas lib
         colnames2 = ["Property Assigned", "First Name", "Last Name", "Username", "User Status", "Enterprise Template", "User Template"]
-        read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t", header=None,skiprows=1,  names=colnames2, encoding='utf-8',low_memory=False)
+        try:
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t", header=None,skiprows=1,  names=colnames2, encoding='utf-8',low_memory=False)
+        except ValueError:
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t", header=None,skiprows=1,  names=colnames2, encoding='cp1252',low_memory=False)        
         read_file.fillna("NULL",inplace=True) ##Replaces NaN with "NULL" string
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
