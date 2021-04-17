@@ -19,23 +19,193 @@ import openpyxl.workbook
 
 # Input file names without file extension
 # Example: "Pa_Aug_4x"
-v_chg_and_adj = "Charges_And_Adjustment_Feb"
-v_payments = "Payments-Feb"
-v_cct = "CCT-Information-Feb"
-v_discp_rates = "Discrepant_Rates_Feb"
-v_dnr1 = "DNR-1-Feb"
-v_dnr2 = "DNR-2-Feb"
-v_dnr3 = "DNR-3-Feb"
-v_grts_and_gst = "Gratis_And_GstCert_Report_Feb"
-v_gst_email = "Guest_Email_Feb"
-v_lldb = "LLDB_Feb"
-v_pay_and_ref = "Payments_And_Refunds_Feb"
-v_prop_over = "Property_Overview_Feb"
-v_room_moves = "Room_Moves_Feb"
-v_os_users = "Organization-Structure-Users_Feb"
-v_os_properties = "Organization-Structure-Properties_Feb"
-v_all_users = "All-Users-Data_Feb"
+v_chg_and_adj = "Charges_And_Adjustment_Mar"
+v_payments = "Payments-Mar"
+v_cct = "CCT-Information-Mar"
+v_discp_rates = "Discrepant_Rates_Mar"
+v_dnr1 = "DNR-1-Mar"
+v_dnr2 = "DNR-2-Mar"
+v_dnr3 = "DNR-3-Mar"
+v_grts_and_gst = "Gratis_And_GstCert_Report_Mar"
+v_gst_email = "Guest_Email_Mar"
+v_lldb = "LLDB_Mar"
+v_pay_and_ref = "Payments_And_Refunds_Mar"
+v_prop_over = "Property_Overview_Mar"
+v_room_moves = "Room_Moves_Mar"
+v_os_users = "Organization-Structure-Users_Mar"
+v_os_properties = "Organization-Structure-Properties_Mar"
+v_all_users = "All-Users-Data_Mar"
 v_api = "3x"
+v_cc_sales = "cc_sales"
+v_cc_refunds = "cc_refunds"
+
+
+def cc_sales():
+    import openpyxl
+    from openpyxl.reader.excel import load_workbook
+    from openpyxl.styles import Font, Alignment
+    from openpyxl.utils import get_column_letter
+
+    print("Processing CC Sales Report")
+    ## DECLARE VARIABLES
+    # Source vars
+    fs_path = os.getcwd()
+    fs_name = v_cc_sales
+    fs_ext = ".csv"
+
+    ##Create working directory
+    wd_name = "Export"
+    wd = os.getcwd()
+    if not os.path.exists(wd_name):
+        os.makedirs(wd_name)
+    #print(wd)
+    #print(wd_name)
+    # Returns the same day of last month if possible otherwise end of month
+    # (eg: March 31st->29th Feb an July 31st->June 30th)
+    last_month = datetime.now() - relativedelta(months=1)
+    # Create string of month name and year...
+    text = format(last_month, "%B %Y")
+    prev_mon = "[" + text + "]"
+
+    # print(prev_mon)
+    fd_name = "./Export/" + "Sales" + prev_mon + ".xlsx"
+    #print(fd_name)
+    # main prog
+    with alive_bar(
+        total=100,
+        manual="True",
+        title="CC Sales",
+        theme="smooth",
+        bar="blocks",
+        spinner="classic",
+    ) as bar:  # default setting
+
+        ## Report 1 -
+        # convert csv to xlsx using pandas lib
+        colnames = ["Request ID","Confirmation No.","Status","Payment Date","Payment Amount","UserID","UserName","Guest Name","Source Code","Source Name","CP Code","CP Name","LDB code","LDB Name","Booking Date","Booking Time GMT","Checked In Date","Check-in date","External Confirmation No","Room Rent","Checked-in Time","Remark"]
+        try:
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep=",",  header=None,  names=colnames, encoding='utf-8',low_memory=False)
+        except ValueError:
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep=",",  header=None,  names=colnames, encoding='cp1252',low_memory=False)
+        bar(0.10)
+        read_file.to_excel("" r"" + fd_name, index=None, header=True)
+        bar(0.20)
+        # read xlsx
+        # assign the excel file to wb() variable
+        wb = load_workbook(fd_name)
+        bar(0.30)
+        # assign the worksheet of the workbook to a ws() variable
+        ws = wb.active
+        ws.delete_cols(18)
+
+        bar(0.40)
+        mr = ws.max_row
+        mc = ws.max_column
+        for cell in ws["mr:mc"]:
+            cell.font = Font(size=11)
+        bar(0.60)
+        # Set header row style
+        for cell in ws["1:1"]:
+            cell.font = Font(size=12)
+            cell.style = "Accent1"
+            cell.alignment = Alignment(wrapText="True", horizontal="center")
+        bar(0.80)
+        # set column width to 15 with loop
+        for col in range(1, 30):
+            ws.column_dimensions[(get_column_letter(col))].width = 15
+            ws.freeze_panes = "A2"
+        # Save the excel file
+        bar(1)
+        wb.save(fd_name)
+
+    print("Export Completed\n")
+
+
+
+
+
+def cc_refunds():
+    import openpyxl
+    from openpyxl.reader.excel import load_workbook
+    from openpyxl.styles import Font, Alignment
+    from openpyxl.utils import get_column_letter
+
+    print("Processing CC Refunds Report")
+    ## DECLARE VARIABLES
+    # Source vars
+    fs_path = os.getcwd()
+    fs_name = v_cc_refunds
+    fs_ext = ".csv"
+
+    ##Create working directory
+    wd_name = "Export"
+    wd = os.getcwd()
+    if not os.path.exists(wd_name):
+        os.makedirs(wd_name)
+    #print(wd)
+    #print(wd_name)
+    # Returns the same day of last month if possible otherwise end of month
+    # (eg: March 31st->29th Feb an July 31st->June 30th)
+    last_month = datetime.now() - relativedelta(months=1)
+    # Create string of month name and year...
+    text = format(last_month, "%B %Y")
+    prev_mon = "[" + text + "]"
+
+    # print(prev_mon)
+    fd_name = "./Export/" + "Refunds" + prev_mon + ".xlsx"
+    #print(fd_name)
+    # main prog
+    with alive_bar(
+        total=100,
+        manual="True",
+        title="CC Refunds",
+        theme="smooth",
+        bar="blocks",
+        spinner="classic",
+    ) as bar:  # default setting
+
+        ## Report 1 -
+        # convert csv to xlsx using pandas lib
+        colnames = ["Request ID","Confirmation No.","Status","Payment Date","Amount","UserID","UserName","Guest Name","Source Code","Source Name","CP Code","CP Name","LDB code","LDB Name","Booking Date","Booking Time GMT","Checked In Date","Check-in date","External Confirmation No","Room Rent","Checked-in Time","Remarks"]
+        try:
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep=",",  header=None,  names=colnames, encoding='utf-8',low_memory=False)
+        except ValueError:
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep=",",  header=None,  names=colnames, encoding='cp1252',low_memory=False)
+        bar(0.10)
+        read_file.to_excel("" r"" + fd_name, index=None, header=True)
+        bar(0.20)
+        # read xlsx
+        # assign the excel file to wb() variable
+        wb = load_workbook(fd_name)
+        bar(0.30)
+        # assign the worksheet of the workbook to a ws() variable
+        ws = wb.active
+        ws.delete_cols(18)
+
+        bar(0.40)
+        mr = ws.max_row
+        mc = ws.max_column
+        for cell in ws["mr:mc"]:
+            cell.font = Font(size=11)
+        bar(0.60)
+        # Set header row style
+        for cell in ws["1:1"]:
+            cell.font = Font(size=12)
+            cell.style = "Accent1"
+            cell.alignment = Alignment(wrapText="True", horizontal="center")
+        bar(0.80)
+        # set column width to 15 with loop
+        for col in range(1, 30):
+            ws.column_dimensions[(get_column_letter(col))].width = 15
+            ws.freeze_panes = "A2"
+        # Save the excel file
+        bar(1)
+        wb.save(fd_name)
+
+    print("Export Completed\n")
+
+
+
 
 def payments():
     ## DECLARE VARIABLES
@@ -1477,6 +1647,8 @@ dispatcher = {
     "14": os_users,
     "15": os_properties,
     "16": all_users,
+    "17": cc_sales,
+    "18": cc_refunds
     "all": all,
 }
 print(
@@ -1497,6 +1669,8 @@ print(
     14 - OS Users\n\
     15 - OS Properties\n\
     16 - All Users\n\
+    17 - CC Sales\n\
+    18 - CC Refunds\n\
     "
 )
 
