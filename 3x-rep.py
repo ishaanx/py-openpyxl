@@ -1648,7 +1648,7 @@ dispatcher = {
     "15": os_properties,
     "16": all_users,
     "17": cc_sales,
-    "18": cc_refunds
+    "18": cc_refunds,
     "all": all,
 }
 print(
