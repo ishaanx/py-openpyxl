@@ -19,23 +19,23 @@ import openpyxl.workbook
 
 # Input file names without file extension
 # Example: "Pa_Aug_4x"
-v_chg_and_adj = "Charges_And_Adjustment_Mar"
-v_payments = "Payments-Mar"
-v_cct = "CCT-Information-Mar"
-v_discp_rates = "Discrepant_Rates_Mar"
-v_dnr1 = "DNR-1-Mar"
-v_dnr2 = "DNR-2-Mar"
-v_dnr3 = "DNR-3-Mar"
-v_grts_and_gst = "Gratis_And_GstCert_Report_Mar"
-v_gst_email = "Guest_Email_Mar"
-v_lldb = "LLDB_Mar"
-v_pay_and_ref = "Payments_And_Refunds_Mar"
-v_prop_over = "Property_Overview_Mar"
-v_room_moves = "Room_Moves_Mar"
-v_os_users = "Organization-Structure-Users_Mar"
-v_os_properties = "Organization-Structure-Properties_Mar"
-v_all_users = "All-Users-Data_Mar"
-v_api = "3x"
+v_chg_and_adj = "Charges_And_Adjustment_Apr_4x"
+v_payments = "Payments_Apr_4x"
+v_cct = "CCT-Information-Apr_4x"
+v_discp_rates = "Discrepant_Rates_Apr_4x"
+v_dnr1 = "DNR-1_Apr_4x"
+v_dnr2 = "DNR-2_Apr_4x"
+v_dnr3 = "DNR-3_Apr_4x"
+v_grts_and_gst = "Gratis_And_GstCert_Report_Apr_4x"
+v_gst_email = "Guest_Email_Apr_4x"
+v_lldb = "LLDB_Apr_4x"
+v_pay_and_ref = "Payments_And_Refunds_Apr_4x"
+v_prop_over = "Property_Overview_Apr_4x"
+v_room_moves = "Room_Moves_Apr_4x"
+v_os_users = "Organization-Structure-Users_Apr_4x"
+v_os_properties = "Organization-Structure-Properties_Apr_4x"
+v_all_users = "All-Users-Data_Apr_4x"
+v_api = "4x"
 v_cc_sales = "cc_sales"
 v_cc_refunds = "cc_refunds"
 
@@ -416,9 +416,9 @@ def chg_and_adj():
         # convert csv to xlsx using pandas lib
         colnames = ["Property Code","Confirmation No","Guest Name","Check in Date","Check in Time","Check out Date","Check out Time"," Room Number","Charge Date","Charge Created at Date","Charge Created at Time","Charge Name","Adjustment Date","Adjustment Created at Date","Adjustment Created at Time","Adjustment Amount","Charge Rate Code Old","Charge Rate Code New","Reason Code","Username","User","Reservation Status","Remarks"]
         try:
-            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",  header=None,  names=colnames, encoding='utf-8', skiprows=1 )
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",  header=None,  names=colnames, encoding='utf-8',quotechar=None,quoting=3, skiprows=1 )
         except ValueError:
-            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",  header=None,  names=colnames, encoding='cp1252', skiprows=1 )
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",  header=None,  names=colnames, encoding='cp1252',quotechar=None,quoting=3, skiprows=1 )
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -496,10 +496,11 @@ def cct():
 
         ## Report 1 -
         # convert csv to xlsx using pandas lib
+        colnames = ["Property Code","Date","Serial No","Product","Application Version","Manufacturer","MFG Serial No"]
         try:
-            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='utf-8')
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",  header=None,  names=colnames, encoding='utf-8',quotechar=None,quoting=3, skiprows=1 )
         except ValueError:
-            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",  header=None,  names=colnames, encoding='cp1252',quotechar=None,quoting=3, skiprows=1 )
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -507,18 +508,8 @@ def cct():
         # assign the excel file to wb() variable
         wb = load_workbook(fd_name)
         bar(0.30)
-
         # assign the worksheet of the workbook to a ws() variable
         ws = wb.active
-        # Columns: property_code date  serial_no   product applicationVersion  manufacturer    mfg_serial_no
-        ws["A1"] = "Property Code"
-        ws["B1"] = "Date"
-        ws["C1"] = "Serial No"
-        ws["D1"] = "Product"
-        ws["E1"] = "Application Version"
-        ws["F1"] = "Manufacturer"
-        ws["G1"] = "MFG Serial No"
-
         bar(0.40)
         mr = ws.max_row
         mc = ws.max_column
@@ -582,12 +573,14 @@ def discp_rates():
         spinner="classic",
     ) as bar:  # default setting
 
+
         ## Report 1 -
         # convert csv to xlsx using pandas lib
+        colnames = ["Property Code","Confirmation No","Rate Change Date","Room Number","Guest Name","Rate Code Name","Quoted Rate","Charged Rate","Variance","Username","User"]
         try:
-            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='utf-8')
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",  header=None,  names=colnames, encoding='utf-8',quotechar=None,quoting=3, skiprows=1 )
         except ValueError:
-            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='cp1252')
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",  header=None,  names=colnames, encoding='cp1252',quotechar=None,quoting=3, skiprows=1 )
         bar(0.10)
         read_file.to_excel("" r"" + fd_name, index=None, header=True)
         bar(0.20)
@@ -595,7 +588,6 @@ def discp_rates():
         # assign the excel file to wb() variable
         wb = load_workbook(fd_name)
         bar(0.30)
-
         # assign the worksheet of the workbook to a ws() variable
         ws = wb.active
         bar(0.40)
