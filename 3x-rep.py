@@ -35,7 +35,7 @@ v_room_moves = "Room_Moves_Apr_4x"
 v_os_users = "Organization-Structure-Users_Apr_4x"
 v_os_properties = "Organization-Structure-Properties_Apr_4x"
 v_all_users = "All-Users-Data_Apr_4x"
-v_api = "4x"
+v_api = "3x"
 v_cc_sales = "cc_sales"
 v_cc_refunds = "cc_refunds"
 
@@ -82,7 +82,27 @@ def cc_sales():
 
         ## Report 1 -
         # convert csv to xlsx using pandas lib
-        colnames = ["Request ID","Confirmation No.","Status","Payment Date","Payment Amount","UserID","UserName","Guest Name","Source Code","Source Name","CP Code","CP Name","LDB code","LDB Name","Booking Date","Booking Time GMT","Checked In Date","Check-in date","External Confirmation No","Room Rent","Checked-in Time","Remark"]
+        colnames = ["Request ID",
+        "Confirmation Number",
+        "Status",
+        "Payment Date",
+        "Payment Amount",
+        "UserID",
+        "UserName",
+        "Guest Name",
+        "Source Code",
+        "Source Name",
+        "CP Code",
+        "CP Name",
+        "LDB code",
+        "LDB Name",
+        "Booking Date",
+        "Booking Time GMT",
+        "Checked In Date",
+        "External Confirmation No",
+        "Room Rent",
+        "Checked-in Time",
+        "Remark"]
         try:
             read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep=",",  header=None,  names=colnames, encoding='utf-8',low_memory=False)
         except ValueError:
@@ -96,7 +116,6 @@ def cc_sales():
         bar(0.30)
         # assign the worksheet of the workbook to a ws() variable
         ws = wb.active
-        ws.delete_cols(18)
 
         bar(0.40)
         mr = ws.max_row
@@ -166,7 +185,27 @@ def cc_refunds():
 
         ## Report 1 -
         # convert csv to xlsx using pandas lib
-        colnames = ["Request ID","Confirmation No.","Status","Payment Date","Amount","UserID","UserName","Guest Name","Source Code","Source Name","CP Code","CP Name","LDB code","LDB Name","Booking Date","Booking Time GMT","Checked In Date","Check-in date","External Confirmation No","Room Rent","Checked-in Time","Remarks"]
+        colnames = ["Request ID",
+        "Confirmation Number",
+        "Status",
+        "Payment Date",
+        "Amount",
+        "UserID",
+        "UserName",
+        "Guest Name",
+        "Source Code",
+        "Source Name",
+        "CP Code",
+        "CP Name",
+        "LDB code",
+        "LDB Name",
+        "Booking Date",
+        "Booking Time GMT",
+        "Checked In Date",
+        "External Confirmation No",
+        "Room Rent",
+        "Checked-in Time",
+        "Remarks"]
         try:
             read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep=",",  header=None,  names=colnames, encoding='utf-8',low_memory=False)
         except ValueError:
@@ -180,7 +219,6 @@ def cc_refunds():
         bar(0.30)
         # assign the worksheet of the workbook to a ws() variable
         ws = wb.active
-        ws.delete_cols(18)
 
         bar(0.40)
         mr = ws.max_row
