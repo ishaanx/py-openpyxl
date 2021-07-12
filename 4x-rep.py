@@ -19,23 +19,27 @@ import openpyxl.workbook
 
 # Input file names without file extension
 # Example: "Pa_Aug_4x"
-v_chg_and_adj = "Charges_And_Adjustment_Feb_4x"
-v_payments = "Payments_Feb_4x"
-v_cct = "CCT_Information_Feb_4x"
-v_discp_rates = "Discrepant_Rates_Feb_4x"
-v_dnr1 = "DNR-1_Feb_4x"
-v_dnr2 = "DNR-2_Feb_4x"
-v_dnr3 = "DNR-3_Feb_4x"
-v_grts_and_gst = "Gratis_And_GstCert_Report_Feb_4x"
-v_gst_email = "Guest_Email_Feb_4x"
-v_lldb = "LLDB_Feb_4x"
-v_pay_and_ref = "Payments_And_Refunds_Feb_4x"
-v_prop_over = "Property_Overview_Feb_4x"
-v_room_moves = "Room_Moves_Feb_4x"
-v_os_users = "Organization-Structure-Users_Feb"
-v_os_properties = "Organization-Structure-Properties_Feb"
-v_all_users = "All-Users-Data_Feb"
+v_chg_and_adj = "Charges_And_Adjustment_Jun_4x"
+v_payments = "Payments_Jun_4x"
+v_cct = "CCT_Information_Jun_4x"
+v_discp_rates = "Discrepant_Rates_Jun_4x"
+v_dnr1 = "DNR-1_Jun_4x"
+v_dnr2 = "DNR-2_Jun_4x"
+v_dnr3 = "DNR-3_Jun_4x"
+v_grts_and_gst = "Gratis_And_GstCert_Report_Jun_4x"
+v_gst_email = "Guest_Email_Jun_4x"
+v_lldb = "LLDB_Jun_4x"
+v_pay_and_ref = "Payments_And_Refunds_Jun_4x"
+v_prop_over = "Property_Overview_Jun_4x"
+v_room_moves = "Room_Moves_Jun_4x"
+v_os_users = "Organization-Structure-Users_Jun"
+v_os_properties = "Organization-Structure-Properties_Jun"
+v_all_users = "All-Users-Data_Jun"
 v_api = "4x"
+
+
+
+
 
 def payments():
     ## DECLARE VARIABLES
@@ -245,6 +249,17 @@ def chg_and_adj():
     ) as bar:  # default setting
 
         ## Report 1 -
+        #### Replace double quotes with whitespace
+        def spl_replace():
+          with open(fs_path + "/" + fs_name + fs_ext, 'r', encoding="cp1252") as f:
+            text = f.read()
+
+          converted_text = text.replace('"', " ")
+
+          with open(fs_path + "/" + fs_name + fs_ext, 'w', encoding="cp1252") as f:
+            f.write(converted_text)
+
+        spl_replace()
         # convert csv to xlsx using pandas lib
         colnames = ["Property Code","Confirmation No","Guest Name","Check in Date","Check in Time","Check out Date","Check out Time"," Room Number","Charge Date","Charge Created at Date","Charge Created at Time","Charge Name","Adjustment Date","Adjustment Created at Date","Adjustment Created at Time","Adjustment Amount","Charge Rate Code Old","Charge Rate Code New","Reason Code","Username","User","Reservation Status","Remarks"]
         try:
@@ -918,6 +933,17 @@ def lldb():
     ) as bar:  # default setting
 
         ## Report 1 -
+        #### Replace double quotes with whitespace
+        def spl_replace():
+          with open(fs_path + "/" + fs_name + fs_ext, 'r', encoding="cp1252") as f:
+            text = f.read()
+
+          converted_text = text.replace('"', " ")
+
+          with open(fs_path + "/" + fs_name + fs_ext, 'w', encoding="cp1252") as f:
+            f.write(converted_text)
+
+        spl_replace()
         # convert csv to xlsx using pandas lib
         read_file = pd.read_csv(
             "" r"" + fs_path + "/" + fs_name + fs_ext,
@@ -1016,6 +1042,17 @@ def pay_and_ref():
     ) as bar:  # default setting
 
         ## Report 1 -
+        #### Replace double quotes with whitespace
+        def spl_replace():
+          with open(fs_path + "/" + fs_name + fs_ext, 'r', encoding="cp1252") as f:
+            text = f.read()
+
+          converted_text = text.replace('"', " ")
+
+          with open(fs_path + "/" + fs_name + fs_ext, 'w', encoding="cp1252") as f:
+            f.write(converted_text)
+
+        spl_replace()        
         # convert csv to xlsx using pandas lib
         try:
             read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='utf-8')
@@ -1094,6 +1131,17 @@ def prop_over():
     ) as bar:  # default setting
 
         ## Report 1 -
+        #### Replace double quotes with whitespace
+        def spl_replace():
+          with open(fs_path + "/" + fs_name + fs_ext, 'r', encoding="cp1252") as f:
+            text = f.read()
+
+          converted_text = text.replace('"', " ")
+
+          with open(fs_path + "/" + fs_name + fs_ext, 'w', encoding="cp1252") as f:
+            f.write(converted_text)
+
+        spl_replace()        
         # convert csv to xlsx using pandas lib
         try:
             read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep="\t",encoding='utf-8')
@@ -1171,8 +1219,17 @@ def room_moves():
         ## Report 1 -
         # convert csv to xlsx using pandas lib
 
-        ####
+        #### Replace double quotes with whitespace
+        def spl_replace():
+          with open(fs_path + "/" + fs_name + fs_ext, 'r', encoding="cp1252") as f:
+            text = f.read()
 
+          converted_text = text.replace('"', " ")
+
+          with open(fs_path + "/" + fs_name + fs_ext, 'w', encoding="cp1252") as f:
+            f.write(converted_text)
+
+        spl_replace()
         # convert csv to xlsx using pandas lib
         colnames2 = ["Property","Confirmation Number","Guest Name","Checked In Date","Checked In Time", "From Room","To Room", "Move Date","Move Time","Remarks", "User"]
         try:
