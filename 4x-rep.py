@@ -16,30 +16,210 @@ import openpyxl
 import openpyxl.styles
 import openpyxl.utils
 import openpyxl.workbook
-
-# Input file names without file extension
-# Example: "Pa_Aug_4x"
-v_chg_and_adj = "Charges_And_Adjustment_Jun_4x"
-v_payments = "Payments_Jun_4x"
-v_cct = "CCT_Information_Jun_4x"
-v_discp_rates = "Discrepant_Rates_Jun_4x"
-v_dnr1 = "DNR-1_Jun_4x"
-v_dnr2 = "DNR-2_Jun_4x"
-v_dnr3 = "DNR-3_Jun_4x"
-v_grts_and_gst = "Gratis_And_GstCert_Report_Jun_4x"
-v_gst_email = "Guest_Email_Jun_4x"
-v_lldb = "LLDB_Jun_4x"
-v_pay_and_ref = "Payments_And_Refunds_Jun_4x"
-v_prop_over = "Property_Overview_Jun_4x"
-v_room_moves = "Room_Moves_Jun_4x"
-v_os_users = "Organization-Structure-Users_Jun"
-v_os_properties = "Organization-Structure-Properties_Jun"
-v_all_users = "All-Users-Data_Jun"
-v_api = "4x"
+from myVariables import *
 
 
+def cc_sales():
+    import openpyxl
+    from openpyxl.reader.excel import load_workbook
+    from openpyxl.styles import Font, Alignment
+    from openpyxl.utils import get_column_letter
+
+    print("Processing CC Sales Report")
+    ## DECLARE VARIABLES
+    # Source vars
+    fs_path = os.getcwd()
+    fs_name = v_cc_sales
+    fs_ext = ".csv"
+
+    ##Create working directory
+    wd_name = "Export"
+    wd = os.getcwd()
+    if not os.path.exists(wd_name):
+        os.makedirs(wd_name)
+    #print(wd)
+    #print(wd_name)
+    # Returns the same day of last month if possible otherwise end of month
+    # (eg: March 31st->29th Feb an July 31st->June 30th)
+    last_month = datetime.now() - relativedelta(months=1)
+    # Create string of month name and year...
+    text = format(last_month, "%B %Y")
+    prev_mon = "[" + text + "]"
+
+    # print(prev_mon)
+    fd_name = "./Export/" + "Sales" + prev_mon + ".xlsx"
+    #print(fd_name)
+    # main prog
+    with alive_bar(
+        total=100,
+        manual="True",
+        title="CC Sales",
+        theme="smooth",
+        bar="blocks",
+        spinner="classic",
+    ) as bar:  # default setting
+
+        ## Report 1 -
+        # convert csv to xlsx using pandas lib
+        colnames = ["Request ID",
+        "Confirmation Number",
+        "Status",
+        "Payment Date",
+        "Payment Amount",
+        "UserID",
+        "UserName",
+        "Guest Name",
+        "Source Code",
+        "Source Name",
+        "CP Code",
+        "CP Name",
+        "LDB code",
+        "LDB Name",
+        "Booking Date",
+        "Booking Time GMT",
+        "Checked In Date",
+        "External Confirmation No",
+        "Room Rent",
+        "Checked-in Time",
+        "Remark"]
+        try:
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep=",",  header=None,  names=colnames, encoding='utf-8',low_memory=False)
+        except ValueError:
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep=",",  header=None,  names=colnames, encoding='cp1252',low_memory=False)
+        bar(0.10)
+        read_file.to_excel("" r"" + fd_name, index=None, header=True)
+        bar(0.20)
+        # read xlsx
+        # assign the excel file to wb() variable
+        wb = load_workbook(fd_name)
+        bar(0.30)
+        # assign the worksheet of the workbook to a ws() variable
+        ws = wb.active
+
+        bar(0.40)
+        mr = ws.max_row
+        mc = ws.max_column
+        for cell in ws["mr:mc"]:
+            cell.font = Font(size=11)
+        bar(0.60)
+        # Set header row style
+        for cell in ws["1:1"]:
+            cell.font = Font(size=12)
+            cell.style = "Accent1"
+            cell.alignment = Alignment(wrapText="True", horizontal="center")
+        bar(0.80)
+        # set column width to 15 with loop
+        for col in range(1, 30):
+            ws.column_dimensions[(get_column_letter(col))].width = 15
+            ws.freeze_panes = "A2"
+        # Save the excel file
+        bar(1)
+        wb.save(fd_name)
+
+    print("Export Completed\n")
 
 
+
+
+
+def cc_refunds():
+    import openpyxl
+    from openpyxl.reader.excel import load_workbook
+    from openpyxl.styles import Font, Alignment
+    from openpyxl.utils import get_column_letter
+
+    print("Processing CC Refunds Report")
+    ## DECLARE VARIABLES
+    # Source vars
+    fs_path = os.getcwd()
+    fs_name = v_cc_refunds
+    fs_ext = ".csv"
+
+    ##Create working directory
+    wd_name = "Export"
+    wd = os.getcwd()
+    if not os.path.exists(wd_name):
+        os.makedirs(wd_name)
+    #print(wd)
+    #print(wd_name)
+    # Returns the same day of last month if possible otherwise end of month
+    # (eg: March 31st->29th Feb an July 31st->June 30th)
+    last_month = datetime.now() - relativedelta(months=1)
+    # Create string of month name and year...
+    text = format(last_month, "%B %Y")
+    prev_mon = "[" + text + "]"
+
+    # print(prev_mon)
+    fd_name = "./Export/" + "Refunds" + prev_mon + ".xlsx"
+    #print(fd_name)
+    # main prog
+    with alive_bar(
+        total=100,
+        manual="True",
+        title="CC Refunds",
+        theme="smooth",
+        bar="blocks",
+        spinner="classic",
+    ) as bar:  # default setting
+
+        ## Report 1 -
+        # convert csv to xlsx using pandas lib
+        colnames = ["Request ID",
+        "Confirmation Number",
+        "Status",
+        "Payment Date",
+        "Amount",
+        "UserID",
+        "UserName",
+        "Guest Name",
+        "Source Code",
+        "Source Name",
+        "CP Code",
+        "CP Name",
+        "LDB code",
+        "LDB Name",
+        "Booking Date",
+        "Booking Time GMT",
+        "Checked In Date",
+        "External Confirmation No",
+        "Room Rent",
+        "Checked-in Time",
+        "Remarks"]
+        try:
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep=",",  header=None,  names=colnames, encoding='utf-8',low_memory=False)
+        except ValueError:
+            read_file = pd.read_csv("" r"" + fs_path + "/" + fs_name + fs_ext, sep=",",  header=None,  names=colnames, encoding='cp1252',low_memory=False)
+        bar(0.10)
+        read_file.to_excel("" r"" + fd_name, index=None, header=True)
+        bar(0.20)
+        # read xlsx
+        # assign the excel file to wb() variable
+        wb = load_workbook(fd_name)
+        bar(0.30)
+        # assign the worksheet of the workbook to a ws() variable
+        ws = wb.active
+
+        bar(0.40)
+        mr = ws.max_row
+        mc = ws.max_column
+        for cell in ws["mr:mc"]:
+            cell.font = Font(size=11)
+        bar(0.60)
+        # Set header row style
+        for cell in ws["1:1"]:
+            cell.font = Font(size=12)
+            cell.style = "Accent1"
+            cell.alignment = Alignment(wrapText="True", horizontal="center")
+        bar(0.80)
+        # set column width to 15 with loop
+        for col in range(1, 30):
+            ws.column_dimensions[(get_column_letter(col))].width = 15
+            ws.freeze_panes = "A2"
+        # Save the excel file
+        bar(1)
+        wb.save(fd_name)
+
+    print("Export Completed\n")
 
 def payments():
     ## DECLARE VARIABLES
@@ -1538,26 +1718,28 @@ dispatcher = {
     "16": all_users,
     "all": all,
 }
+os.system('cls' if os.name == 'nt' else 'clear')
+print("Created by ishaan badgainya")
 print(
     "Following choices are available:\n\
-    1 - Payments\n\
-    2 - CCT\n\
-    3 - Charges and adjustments\n\
-    4 - Discrepant rates\n\
-    5 - DNR 1\n\
-    6 - DNR 2\n\
-    7 - DNR 3\n\
-    8 - GRTS and GSTCRT\n\
-    9 - Guest Email\n\
-    10 - LLDB\n\
-    11 - Payments and Refunds\n\
-    12 - Prop overview\n\
-    13 - Room Moves\n\
-    14 - OS Users\n\
-    15 - OS Properties\n\
-    16 - All Users\n\
+    1 - Payments Report\n\
+    2 - CCT Information Report\n\
+    3 - Charges and Adjustments Report\n\
+    4 - Discrepant Rates Report\n\
+    5 - DNR 1 Report\n\
+    6 - DNR 2 Report\n\
+    7 - DNR 3 Report\n\
+    8 - GRTS and GSTCRT Report\n\
+    9 - Guest Email Report\n\
+    10 - LLDB Report\n\
+    11 - Payments and Refunds Report\n\
+    12 - Property Overview Report\n\
+    13 - Room Moves Report\n\
+    14 - Organization Structure Users Report\n\
+    15 - Organization Structure Properties Report\n\
+    16 - All Users Report\n\
     "
 )
 
-action = input("Option: - ")
+action = input("Enter a number [1 to 16] or 'all' to process all reports: - ")
 dispatcher[action]()
