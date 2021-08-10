@@ -1,3 +1,4 @@
+#Import required libraries
 import os
 import xlsxwriter
 import glob
@@ -17,6 +18,7 @@ import openpyxl.styles
 import openpyxl.utils
 import openpyxl.workbook
 from myVariables import *
+
 
 
 def cc_sales():
@@ -119,9 +121,6 @@ def cc_sales():
     print("Export Completed\n")
 
 
-
-
-
 def cc_refunds():
     import openpyxl
     from openpyxl.reader.excel import load_workbook
@@ -220,6 +219,7 @@ def cc_refunds():
         wb.save(fd_name)
 
     print("Export Completed\n")
+
 
 def payments():
     ## DECLARE VARIABLES
@@ -1129,6 +1129,7 @@ def lldb():
             "" r"" + fs_path + "/" + fs_name + fs_ext,
             sep="\t",
             header=0,
+            encoding='cp1252',
             names=[
                 "Property Code",
                 "Property Name",
@@ -1719,7 +1720,7 @@ dispatcher = {
     "all": all,
 }
 os.system('cls' if os.name == 'nt' else 'clear')
-print("Created by ishaan badgainya")
+print("Created by ishan badgainya")
 print(
     "Following choices are available:\n\
     1 - Payments Report\n\
@@ -1740,6 +1741,5 @@ print(
     16 - All Users Report\n\
     "
 )
-
 action = input("Enter a number [1 to 16] or 'all' to process all reports: - ")
 dispatcher[action]()
